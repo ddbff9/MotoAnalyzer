@@ -14,39 +14,34 @@ var connectionOptions = {
   database: mysqlDB
   };
 
-console.log('MySQL Connection config:');
-console.log(connectionOptions);
+// console.log('MySQL Connection config:');
+// console.log(connectionOptions);
 
-async function getDan() {
+const getEvent = async (Event_Id) => {
   try{
-    const con = await mysql.createConnection(connectionOptions);
+    const connection = await mysql.createConnection(connectionOptions);
 
-    const name = 'Dan';
-
-    const [rows,schema] = await con.query(`SELECT * FROM EMPLOYEES WHERE NAME = ?`,[name]);
+    const [rows,schema] = await connection.query(`SELECT * FROM Events_View WHERE Id = ?`, [Event_Id]);
 
     console.table(rows);
-    console.log(rows[0]['NAME'])
-    con.end();
-    return rows[0]['NAME']
+    returnedName = rows[0]['Name']
+    connection.end();
 
+    return returnedName;
   }
   catch(ex){
     console.error(ex);
   }
 };
 
-async function getKatie() {
+const getResults = async (Event_Id) => {
   try{
-    const con = await mysql.createConnection(connectionOptions);
+    const connection = await mysql.createConnection(connectionOptions);
 
-    const name = 'Katie';
-
-    const [rows,schema] = await con.query(`SELECT * FROM EMPLOYEES WHERE NAME = ?`,[name]);
+    const [rows,schema] = await connection.query(`SELECT * FROM Results_View WHERE Event_Id = ?`, [Event_Id]);
 
     console.table(rows);
-    console.log(rows[0]['NAME'])
-    con.end();
+    connection.end();
 
   }
   catch(ex){
@@ -129,14 +124,15 @@ let riderResult = new QueryResults(1,                // Rider_ID
                                    1);               // Position
 
 
-getDan();
-getKatie();
+getEvent(1).then(console.log);
+getResults(1);
 
-user.createQuery();
-user.deleteQuery();
-user.modifyQuery();
 
-userSelections.saveQuery();
-userSelections.viewQuery();
+// user.createQuery();
+// user.deleteQuery();
+// user.modifyQuery();
 
-riderResult.buildQueryOutput();
+// userSelections.saveQuery();
+// userSelections.viewQuery();
+
+// riderResult.buildQueryOutput();

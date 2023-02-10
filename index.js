@@ -1,25 +1,26 @@
-const mysql = require("mysql2/promise");
+class Database {
+  constructor(mysqlHost, mysqlPort,mysqlUser,mysqlPass,mysqlDB){
+    this.mysql = require("mysql2/promise");
+    this.mysqlHost = process.env.MYSQL_HOST || mysqlHost;
+    this.mysqlPort = process.env.MYSQL_PORT || mysqlPort;
+    this.mysqlUser = process.env.MYSQL_USER || mysqlUser;
+    this.mysqlPass = process.env.MYSQL_PASS || mysqlPass;
+    this.mysqlDB   = process.env.MYSQL_DB   || mysqlDB;
+    this.connectionOptions = {
+      host: this.mysqlHost,
+      port: this.mysqlPort,
+      user: this.mysqlUser,
+      password: this.mysqlPass,
+      database: this.mysqlDB
+      };
+  }
+}
 
-var mysqlHost = process.env.MYSQL_HOST || 'localhost';
-var mysqlPort = process.env.MYSQL_PORT || 3306;
-var mysqlUser = process.env.MYSQL_USER || 'root';
-var mysqlPass = process.env.MYSQL_PASS || 'password';
-var mysqlDB   = process.env.MYSQL_DB   || 'MotoAnalytics';
-
-var connectionOptions = {
-  host: mysqlHost,
-  port: mysqlPort,
-  user: mysqlUser,
-  password: mysqlPass,
-  database: mysqlDB
-  };
-
-// console.log('MySQL Connection config:');
-// console.log(connectionOptions);
+let db = new Database( 'localhost',3306,'root','password','MotoAnalytics');
 
 const getEvent = async (Event_Id) => {
   try{
-    const connection = await mysql.createConnection(connectionOptions);
+    const connection = await db.mysql.createConnection(db.connectionOptions);
 
     const [rows,schema] = await connection.query(`SELECT * FROM Events_View WHERE Id = ?`, [Event_Id]);
 
@@ -34,20 +35,56 @@ const getEvent = async (Event_Id) => {
   }
 };
 
-const getResults = async (Event_Id) => {
-  try{
-    const connection = await mysql.createConnection(connectionOptions);
+// const mysql = require("mysql2/promise");
 
-    const [rows,schema] = await connection.query(`SELECT * FROM Results_View WHERE Event_Id = ?`, [Event_Id]);
+// var mysqlHost = process.env.MYSQL_HOST || 'localhost';
+// var mysqlPort = process.env.MYSQL_PORT || 3306;
+// var mysqlUser = process.env.MYSQL_USER || 'root';
+// var mysqlPass = process.env.MYSQL_PASS || 'password';
+// var mysqlDB   = process.env.MYSQL_DB   || 'MotoAnalytics';
 
-    console.table(rows);
-    connection.end();
+// var connectionOptions = {
+//   host: mysqlHost,
+//   port: mysqlPort,
+//   user: mysqlUser,
+//   password: mysqlPass,
+//   database: mysqlDB
+//   };
 
-  }
-  catch(ex){
-    console.error(ex);
-  }
-};
+// // console.log('MySQL Connection config:');
+// // console.log(connectionOptions);
+
+// const getEvent = async (Event_Id) => {
+//   try{
+//     const connection = await mysql.createConnection(connectionOptions);
+
+//     const [rows,schema] = await connection.query(`SELECT * FROM Events_View WHERE Id = ?`, [Event_Id]);
+
+//     console.table(rows);
+//     returnedName = rows[0]['Name']
+//     connection.end();
+
+//     return returnedName;
+//   }
+//   catch(ex){
+//     console.error(ex);
+//   }
+// };
+
+// const getResults = async (Event_Id) => {
+//   try{
+//     const connection = await mysql.createConnection(connectionOptions);
+
+//     const [rows,schema] = await connection.query(`SELECT * FROM Results_View WHERE Event_Id = ?`, [Event_Id]);
+
+//     console.table(rows);
+//     connection.end();
+
+//   }
+//   catch(ex){
+//     console.error(ex);
+//   }
+// };
 
 class User{
 
@@ -124,8 +161,8 @@ let riderResult = new QueryResults(1,                // Rider_ID
                                    1);               // Position
 
 
-getEvent(1).then(console.log);
-getResults(1);
+getEvent(4).then(console.log);
+// getResults(1);
 
 
 // user.createQuery();

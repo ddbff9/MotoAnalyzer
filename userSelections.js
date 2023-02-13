@@ -1,5 +1,4 @@
 const Database =require('./database');
-const QueryOutput = require('./queryOutput')
 
 // Create new database object with connection parameters:
 let db = new Database( 'localhost',3306,'root','password','MotoAnalytics');

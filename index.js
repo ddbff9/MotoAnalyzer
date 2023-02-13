@@ -4,3 +4,5 @@ const Database =require('./database');
 const userSelections = require('./testSelections')
 
 userSelections.viewQuery()
+
+console.log(userSelections.output)

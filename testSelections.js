@@ -12,9 +12,9 @@ function buildUserSelections(){
                                              ['Eli Tomac','Cooper Webb', 'Ken Roczen','Chase Sexton'],         // Rider_List
                                              [1],                                               // Round_List
                                              ['Anaheim, CA'],                                   // Location_List
-                                             ['Baseball', 'Football'],                                      // Venue_Type_List
+                                             ['Baseball'],                                      // Venue_Type_List
                                              ['Hard-Pack'],                                     // Soil_Type_List
-                                             [1,2],                                               // Whoop_Section_List
+                                             [2],                                               // Whoop_Section_List
                                              ['Main Event','Qualifying'],                       // Session_Type_List
                                              'Avg Finish');                                   // Result_Type_List
                                              return userSelections

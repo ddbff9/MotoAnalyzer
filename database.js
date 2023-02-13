@@ -14,6 +14,25 @@ class Database {
       database: this.mysqlDB
       };
   }
+
+  getAvgFinish = async (rider, session, attr_type, attr) => {
+    try{
+      const connection = await this.mysql.createConnection(this.connectionOptions);
+      const [results, schema] = await connection.query(`SELECT Session_Type, Position FROM Results_Attrs_View WHERE Rider_Name = '${rider}' AND ${attr_type} = '${attr}' AND Session_Type = '${session}'`);
+  
+      let result = 0;
+  
+      for (let i = 0; i < results.length; i++) {
+        result += results[i]['Position'];
+      }
+      let averagePosition = result/results.length
+      connection.end
+      return averagePosition
+    }
+    catch(ex){
+      console.error(ex);
+    }
+  };
 }
 
 module.exports = Database;

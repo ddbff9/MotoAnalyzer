@@ -1,1 +1,1 @@
- // console.log(`${rider}'s Average Position: ${averagePosition}`)
+h

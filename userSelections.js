@@ -1,4 +1,4 @@
-const dataOutput = require('./dataOutput');
+const dataOutput = require('./helpers/dataOutput');
 class UserSelections{
   constructor(user_id, rider_list, round_list, location_list, venue_type_list, soil_type_list, whoop_section_list, session_type_list, result_type){
     this.user_id = user_id;

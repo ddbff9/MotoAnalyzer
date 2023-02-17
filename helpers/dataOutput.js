@@ -1,7 +1,4 @@
-const Database =require('./database');
-
-// Create new database object with connection parameters:
-let db = new Database( '108.167.133.28',3306,'motoanal_db_admin','H0ckey1!DB','motoanal_db');
+const {motoanal_db} = require('../__private__/environment')
 
 viewDataOutput = async (userSelections) => {
   const queryOutput = await buildQueryOutput(userSelections);
@@ -76,7 +73,7 @@ getQueryResults = async (userSelections) => {
 
     if (userSelections.outputType == 'Avg Finish'){
 
-      let result = db.getAveragePosition(await db.getResults(parameter.Rider_Name, parameter.Session_Type, parameter.Attribute_Type, parameter.Value));
+      let result = motoanal_db.getAveragePosition(await motoanal_db.getResults(parameter.Rider_Name, parameter.Session_Type, parameter.Attribute_Type, parameter.Value));
       let attribute = createColumnHeader(parameter.Attribute_Type,parameter.Value);
 
       queries.push({

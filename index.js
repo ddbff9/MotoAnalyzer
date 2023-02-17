@@ -2,6 +2,6 @@
 // TODO: In production create funciton to getUserSelections from event loop:
 const userSelections = require('./testSelections');
 
+
 // run viewQuery function to see output table with the user's selected data attributes:
-userSelections.viewQuery();
-console.log(userSelections)
+userSelections.viewQuery()

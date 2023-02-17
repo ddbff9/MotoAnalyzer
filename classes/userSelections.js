@@ -37,6 +37,7 @@ class UserSelections{
   viewQuery(){
     dataOutput.viewDataOutput(this)
   }
+
 };
 
 module.exports = UserSelections;

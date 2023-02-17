@@ -74,7 +74,7 @@ getQueryResults = async (userSelections) => {
 
     if (userSelections.outputType == 'Avg Finish'){
 
-      let result = motoanal_db.getAveragePosition(await motoanal_db.getResults(parameter.Rider_Name, parameter.Session_Type, parameter.Attribute_Type, parameter.Value));
+      let result = getAveragePosition(await getResults(parameter.Rider_Name, parameter.Session_Type, parameter.Attribute_Type, parameter.Value));
       let attribute = createColumnHeader(parameter.Attribute_Type,parameter.Value);
 
       queries.push({
@@ -103,6 +103,30 @@ getQueryParameters = (userSelections) => {
     }
   }
   return queryParameters;
+}
+
+getResults = async (rider, session, attr_type, attr)=> {
+  try{
+    const connection = await motoanal_db.mysql.createConnection(motoanal_db.connectionOptions);
+    const [results, schema] = await connection.query(`SELECT Session_Type, Position FROM Results_Attrs_View WHERE Rider_Name = '${rider}' AND ${attr_type} = '${attr}' AND Session_Type = '${session}'`);
+    connection.end();
+    return results;
+  } catch(ex){
+    console.error(ex);
+  }
+}
+
+getAveragePosition = (results)=>{
+  let numerator = 0;
+  let denominator = results.length
+
+  for (const result of results){
+    numerator += result['Position'];
+  }
+
+  let averagePosition = numerator/denominator
+
+  return averagePosition
 }
 
 

@@ -1,4 +1,4 @@
-const UserSelections = require('./userSelections');
+const UserSelections = require('../userSelections');
 
 // Example of user selections class being created:
 let testSelections = new UserSelections(1,['Eli Tomac','Ken Roczen'],[1],['Anaheim, CA'],['Baseball'],['Hard-Pack'],[2],['Qualifying','Main Event'],['Avg Finish']);

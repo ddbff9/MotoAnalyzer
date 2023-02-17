@@ -1,5 +1,5 @@
-const UserSelections = require('./userSelections');
-const User = require('./user');
+const UserSelections = require('../classes/userSelections');
+const User = require('../classes/user');
 
 function buildUser(id, name, address,email,phone){
   let user = new User(id, name, address, email, phone);

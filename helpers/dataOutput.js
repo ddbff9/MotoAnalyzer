@@ -1,3 +1,4 @@
+// Creates connection to MotoAnlatics DB stored on web, while keeping these credentials private.
 const {motoanal_db} = require('../__private__/environment')
 
 viewDataOutput = async (userSelections) => {

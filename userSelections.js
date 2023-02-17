@@ -1,18 +1,14 @@
 const Database =require('./database');
 
 // Create new database object with connection parameters:
-let db = new Database( 'localhost',3306,'root','password','MotoAnalytics');
+let db = new Database( '108.167.133.28',3306,'motoanal_db_admin','H0ckey1!DB','motoanal_db');
 class UserSelections{
   constructor(user_id, rider_list, round_list, location_list, venue_type_list, soil_type_list, whoop_section_list, session_type_list, result_type){
     this.user_id = user_id;
     this.riders = rider_list,
     this.sessions = session_type_list;
     this.outputType = result_type;
-    this.attributes= [];
-    this.queryParameters = []
-    this.output = [];
-    this.queryTable = [];
-    
+    this.attributes= [];    
 
     // Set Category, Attribute, and Value for selections that the user chose:
     this.setDataAttributes('Series','Round',round_list);
@@ -23,112 +19,127 @@ class UserSelections{
     this.getQueryParameters();
   }
   
+  // Constructor function to create an object for each data attribute the user selected:
   setDataAttributes(category, attribute, values){
-    for (let i=0; i < values.length; i++){
+    for (const value of values){
       let selection = {
         category : category,
         attribute : attribute,
-        value : values[i]
+        value : value
       }
       this.attributes.push(selection)
     }
   };
 
+  // TODO: Create a database table to save user queries in, then update this function to store the user selections to that table.
   saveQuery(){
     console.log(`User ${this.user_id} saved the query selections!`)
   };
 
-  getUniqueKeys(list){
-    let uniqueKeys = []
-    for (let i=0; i<list.length;i++){
-      let keys = Object.keys(list[i])
-      for (let j=0; j<keys.length;j++){
-        if (!uniqueKeys.includes(keys[j])){
-          uniqueKeys.push(keys[j])
-        }
-      }
-    }
-    return uniqueKeys
-  };
+  async viewQuery(){
+    const queryOutput = await this.buildQueryOutput();
+    await console.table(queryOutput)
+   };
+  
+  // Query processing Functions:
+  async buildQueryOutput() {
+    const queryResults = await this.getQueryResults();
+    const riders = this.getUniqueRiders(queryResults);
+    const sessions = this.getUniqueSessions(queryResults)
+    const attributes = this.getUniqueAttributes(queryResults);
+    const queryOutput = [];
 
-  viewQuery = async () => {
-    await this.buildQuery();
-    let results = this.output;
-    const uniqueRiders = [...new Set(results.map(results => results.Rider))];
-    const uniqueSessions = [...new Set(results.map(results => results.Session))];
-    
-    let uniqueKeys = this.getUniqueKeys(results);
+    for (const rider of riders){
+      for (const session of sessions){
+        let queryRow = {};
+        queryRow.Rider = rider;
+        queryRow.Session = session;
 
-    for (let i=0; i<uniqueRiders.length;i++){
-      
-      for (let k=0; k<uniqueSessions.length;k++){
-        let temp_object = {};
-        temp_object.Rider = uniqueRiders[i];
-        temp_object.Session = uniqueSessions[k];
-      
-        for (let j=0; j<results.length;j++){
-
-          for (let l = 0; l < uniqueKeys.length; l++){
-            let temp_attr = uniqueKeys[l]
-            if(results[j].Rider == uniqueRiders[i] && results[j].Session == uniqueSessions[k] && !(temp_attr in temp_object) && !(results[j][temp_attr] == undefined)){
-              temp_object[temp_attr] = results[j][[temp_attr]];
+        for (const query of queryResults){  
+          for (const attribute of attributes){
+            if(query.Rider == rider && query.Session == session && !(attribute in queryRow) && !(query[attribute] == undefined)){
+              queryRow[attribute] = query[[attribute]];
             }
           }
         }
-        this.queryTable.push(temp_object)
+        queryOutput.push(queryRow)
       }
     }
-    console.table(this.queryTable);
+    return queryOutput;
   };
 
-  buildQuery = async () => {
-    for(let i=0; i < this.queryParameters.length; i++){
-      let rider = this.queryParameters[i].Rider_Name;
-      let session = this.queryParameters[i].Session_Type;
-      let attr_type = this.queryParameters[i].Attribute_Type;
-      let attr_value = this.queryParameters[i].Value;
+  getUniqueAttributes(results){
+    let uniqueAttributes = [];
 
-      if (this.outputType == 'Avg Finish'){
-        let result = await db.getAvgFinish(rider,session,attr_type,attr_value);
-        if (attr_type=='Round'){
-          attr_type = `${attr_type} ${attr_value}`
-        }
-
-        if (attr_type=='Venue_Type' || attr_type=='Location'){
-          attr_type = `${attr_value}`
-        }
-
-        if (attr_type=='Soil_Type'){
-          attr_type = `${attr_value} Soil`
-        }
-
-        if (attr_type=='Whoops'){
-          attr_type = `${attr_value} Set(s) of Whoops`
-        }
-
-        this.output.push({
-          Rider : rider,
-          Session : session,
-          [attr_type] : result
-          })
+    for (const result of results){
+      let attributes = Object.keys(result)
+      for (const attribute of attributes){
+        if (!uniqueAttributes.includes(attribute)){
+          uniqueAttributes.push(attribute)
         }
       }
+    }
+    return uniqueAttributes;
+  };
+
+  getUniqueRiders(results) {
+    return [...new Set(results.map(results => results.Rider))];
+  };
+
+  getUniqueSessions(results){
+    return [...new Set(results.map(results => results.Session))];
+  };
+
+  createColumnHeader(attribute,value){
+    if (attribute =='Round'){
+      return `${attribute } ${value}`
+    } else if (attribute =='Soil_Type'){
+      return `${value} Soil`
+    } else if (attribute =='Whoops'){
+      return `${value} Set(s) of Whoops`
+    } else {
+      return `${value}`
+    }
+  }
+  
+  async getQueryResults(){
+    let queries = [];
+    const parameters = this.getQueryParameters();
+
+    for (const parameter of parameters){
+
+      if (this.outputType == 'Avg Finish'){
+
+        let result = db.getAveragePosition(await db.getResults(parameter.Rider_Name, parameter.Session_Type, parameter.Attribute_Type, parameter.Value));
+        let attribute = this.createColumnHeader(parameter.Attribute_Type,parameter.Value);
+
+        queries.push({
+          Rider : parameter.Rider_Name,
+          Session : parameter.Session_Type,
+          [attribute] : result
+          })
+        };
+      };
+      return queries
     };
 
   getQueryParameters(){
-    for (let i=0; i < this.riders.length; i++){
-      for (let j=0; j< this.sessions.length; j++){
-        for(let k=0; k< this.attributes.length; k++){
+    let queryParameters = [];
+
+    for (const rider of this.riders){
+      for (const session of this.sessions){
+        for (const attribute of this.attributes){
           let parameters = {
-            Rider_Name : this.riders[i],
-            Session_Type : this.sessions[j],
-            Attribute_Type: this.attributes[k].attribute,
-            Value : this.attributes[k].value
+            Rider_Name : rider,
+            Session_Type : session,
+            Attribute_Type: attribute.attribute,
+            Value : attribute.value
             }
-          this.queryParameters.push(parameters);
+          queryParameters.push(parameters);
         }
       }
     }
+    return queryParameters;
   }
 };
 

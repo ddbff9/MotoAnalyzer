@@ -1,14 +1,7 @@
 const UserSelections = require('../class_definitions/userSelections');
-const User = require('../class_definitions/user');
 
-function buildUser(id, name, address,email,phone){
-  let user = new User(id, name, address, email, phone);
-  return user
-};
 
-user = buildUser(1,"Dan Bax","316 Heather Mill Dr.","Dan.D.Bax@gmail.com","(314) 406-5730");
-
-function buildUserSelections(){
+function buildUserSelections(user){
   let userSelections = new UserSelections(user.id,                                              // User ID
                                              ['Eli Tomac','Cooper Webb', 'Ken Roczen', 'Chase Sexton'],         // Rider_List
                                              [1],                                               // Round_List
@@ -21,4 +14,4 @@ function buildUserSelections(){
                                              return userSelections
 }
 
-module.exports = buildUserSelections();
+module.exports = {buildUserSelections};

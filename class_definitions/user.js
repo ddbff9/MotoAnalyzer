@@ -19,6 +19,10 @@ class User{
   modifyQuery(){
     console.log(`${this.name} modified a query!`);
   }
+
+  printUserInfo(){
+    console.table(this);
+  }
 }
 
 module.exports = User;

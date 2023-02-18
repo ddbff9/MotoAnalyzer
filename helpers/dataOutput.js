@@ -1,12 +1,11 @@
 // Creates connection to MotoAnlatics DB stored on web, while keeping these credentials private.
 const {motoanal_db} = require('../__private__/environment')
 
-viewDataOutput = async (userSelections) => {
-  const queryOutput = await buildQueryOutput(userSelections);
-  await console.table(queryOutput);
+printUserSelectionsQueryOutput = async (userSelections) => {
+  await console.table(await getUserSelectionsQueryOutput(userSelections))
   };
 
-buildQueryOutput = async (userSelections) => {
+getUserSelectionsQueryOutput = async (userSelections) => {
   const queryResults = await getQueryResults(userSelections);
   const riders = getUniqueRiders(queryResults);
   const sessions = getUniqueSessions(queryResults)
@@ -130,4 +129,4 @@ getAveragePosition = (results)=>{
 }
 
 
-module.exports = {viewDataOutput};
+module.exports = {printUserSelectionsQueryOutput};

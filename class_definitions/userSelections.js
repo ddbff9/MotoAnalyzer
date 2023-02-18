@@ -35,7 +35,6 @@ class UserSelections{
   };
 
   viewQuery(){
-    console.log(this);
     printUserSelectionsQueryOutput(this);
   }
 

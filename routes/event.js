@@ -15,9 +15,24 @@ Router.get('/', (req, res) => {
     }
   )
 });
-Router.post("/1", (req, res) => {
-  console.log(req.body.Id)
+
+Router.get('/events', (req, res) => {
+  mysqlConnection.query(
+    "SELECT * FROM Event",
+    (err, results, fields) => {
+      if(!err) {
+        let events = results;
+        res.render('events/index', {events});
+      } else {
+        console.log(err);
+      }
+    }
+  )
 });
+
+Router.get('/events/:id', (req,res)=>{
+  res.render('events/show')
+})
 
 Router.post("/", (req, res) => {
   console.log(req.body)

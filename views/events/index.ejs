@@ -10,7 +10,7 @@
   <h1>All Events!</h1>
   <ul>
     <% for (let event of events) {%>
-      <li><a href="/events/<%= event.Id %>">Round <%= event.Round %> - <%= event.Name %></a></li>
+      <li><a href="/events/<%= event.Id %>">Round <%= event.Round_Number %> - <%= event.Name %></a></li>
     <%}%>
   </ul>
 </body>

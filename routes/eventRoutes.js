@@ -30,9 +30,19 @@ Router.get('/events', (req, res) => {
   )
 });
 
-Router.get('/events/:id', (req,res)=>{
-  res.render('events/show')
-})
+Router.get('/events/:id', async (req,res)=>{
+  mysqlConnection.query("SELECT Event.Id, Event.Ama_id, Event.Type AS Event_Type, Event.Name AS Event_Name, Event.Region, Event.Round_Number, Event.Triple_Crown, Event.Gate_Drop, Event.Whoop_Section, Event.Sand_Section, Event.Soil_Id, Venue.Name AS Venue_Name, CONCAT(Venue.City, ', ', Venue.State) AS `Location`FROM Event INNER JOIN Venue ON Venue.Id = Event.Venue_Id WHERE Event.Id = ?;",
+    [req.params.id],
+    (err, results,fields)=> {
+    if(!err){
+      let event = results[0]
+      res.render('events/show', { event });
+    }else {
+      console.log(err);
+    }
+  }
+);
+});
 
 Router.post("/", (req, res) => {
   console.log(req.body)

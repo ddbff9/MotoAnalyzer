@@ -14,6 +14,7 @@ const path = require('path');
 
 // Helper file where routes are defined:
 const eventRoutes = require('./routes/eventRoutes');
+const exp = require('constants');
 
 // A template engine enables you to use static template files in your application.
 // At runtime, the template engine replaces variables in a template file with 
@@ -28,10 +29,13 @@ app.set('view engine', 'ejs');
 // https://www.geeksforgeeks.org/how-to-setup-view-engine-in-node-js/
 app.set('views', path.join(__dirname, 'views'));
 
+app.use(express.urlencoded({extended: true}));
+
 // The app.use() function is used to mount the specified middleware function(s) at the
 // path which is being specified.
 https://www.geeksforgeeks.org/express-js-app-use-function/
 app.use(eventRoutes);
+
 
 // The app.listen() function is used to bind and listen the connections on the
 // specified host and port. This method is identical to Node’s http.Server.listen() method.

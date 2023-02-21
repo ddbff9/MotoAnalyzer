@@ -30,6 +30,23 @@ Router.get('/events', (req, res) => {
   )
 });
 
+Router.get('/events/new', (req,res)=>{
+  res.render('events/new');
+});
+
+Router.post('/events', async (req, res)=>{
+
+  mysqlConnection.query("INSERT INTO `motoanal_db`.`Event` (`Type`, `Name`) VALUES (?, ?);",[req.body.Event.Type, req.body.Event.Name],
+  (err, results,fields)=> {
+    if(!err){
+      res.render('events');
+    }else {
+      console.log(err);
+    }
+  }
+);
+});
+
 Router.get('/events/:id', async (req,res)=>{
   mysqlConnection.query("SELECT Event.Id, Event.Ama_id, Event.Type AS Event_Type, Event.Name AS Event_Name, Event.Region, Event.Round_Number, Event.Triple_Crown, Event.Gate_Drop, Event.Whoop_Section, Event.Sand_Section, Event.Soil_Id, Venue.Name AS Venue_Name, CONCAT(Venue.City, ', ', Venue.State) AS `Location`FROM Event INNER JOIN Venue ON Venue.Id = Event.Venue_Id WHERE Event.Id = ?;",
     [req.params.id],

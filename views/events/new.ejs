@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Event</title>
+</head>
+<body>
+  <form action="/events" method="POST">
+    <div>
+      <label for="eventType">Type</label>
+      <input type="text" name="Event[Type]" id="eventType">
+    </div>
+    <div>
+      <label for="eventName">Name</label>
+      <input type="text" name="Event[Name]" id="eventName">
+    </div>
+    <button>Add Event</button>
+  </form>
+</body>
+</html>

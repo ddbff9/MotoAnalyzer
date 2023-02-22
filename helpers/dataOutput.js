@@ -124,6 +124,8 @@ getAveragePosition = (results)=>{
   }
 
   let averagePosition = numerator/denominator
+  // averagePosition = averagePosition.toFixed(2);
+  averagePosition =  Math.round((averagePosition + Number.EPSILON) * 10) / 10
 
   return averagePosition
 }

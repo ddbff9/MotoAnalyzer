@@ -60,6 +60,13 @@ createColumnHeader = (attribute,value) => {
     return `${value} Soil`
   } else if (attribute =='Whoops'){
     return `${value} Set(s) of Whoops`
+  } else if (attribute =='Open_Air'){
+      if (value == 0){
+        return `Covered Stadium`
+      } else {
+        return 'Open-Air Stadium'
+      }
+    
   } else {
     return `${value}`
   }
@@ -107,7 +114,7 @@ getQueryParameters = (userSelections) => {
 getResults = async (rider, session, attr_type, attr)=> {
   try{
     const connection = await motoanal_db.mysql.createConnection(motoanal_db.connectionOptions);
-    const [results, schema] = await connection.query(`SELECT Session_Type, Position FROM Results_Attrs_View WHERE Rider_Name = '${rider}' AND ${attr_type} = '${attr}' AND Session_Type = '${session}'`);
+    const [results, schema] = await connection.query(`SELECT Session_Type, Position FROM Results_Filtered WHERE Rider_Name = '${rider}' AND ${attr_type} = '${attr}' AND Session_Type = '${session}'`);
     connection.end();
     return results;
   } catch(ex){

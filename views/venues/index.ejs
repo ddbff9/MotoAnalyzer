@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Venues</title>
-</head>
-<body>
-  <h1>All Venues!</h1>
-  <ul>
-    <% for (let venue of venues) {%>
-      <li><a href="/venues/<%= venue.Id %>"><%= venue.Id %> - <%= venue.Name %></a></li>
-    <%}%>
-  </ul>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Venues</title>
+  </head>
+  <body>
+    <h1>All Venues!</h1>
+    <ul>
+      <% for (let venue of venues) {%>
+      <li>
+        <a href="/venues/<%= venue.Id %>"
+          ><%= venue.Id %> - <%= venue.Name %></a
+        >
+      </li>
+      <%}%>
+    </ul>
+  </body>
+  <footer>
+    <a href="/venues/new">Add a New Venue</a>
+  </footer>
 </html>

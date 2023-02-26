@@ -4,17 +4,17 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Events</title>
+  <title>Riders</title>
 </head>
 <body>
-  <h1>All Events!</h1>
+  <h1>All Riders!</h1>
   <ul>
-    <% for (let event of events) {%>
-      <li><a href="/events/<%= event.Id %>">Round <%= event.Round_Number %> - <%= event.Name %></a></li>
+    <% for (let rider of riders) {%>
+      <li><a href="/riders/<%= rider.Id %>"><%= rider.Name %></a></li>
     <%}%>
   </ul>
 </body>
 <footer>
-  <a href="/events/new">Add a New Event</a>
+  <a href="/riders/new">Add a New Rider</a>
 </footer>
 </html>

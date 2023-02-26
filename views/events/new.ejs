@@ -7,6 +7,7 @@
     <title>New Event</title>
   </head>
   <body>
+    <h1>Add a New Event!</h1>
     <form action="/events" method="POST">
       <div>
         <label for="eventType">Type</label>
@@ -37,6 +38,7 @@
             <option value=<%= venue.Id %>><%= venue.Name %></option>
           <%}%>
         </select>
+        <a href="/venues/new">Add a New Venue</a>
       </div>
       <div>
         <label for="eventRound">Round: </label>
@@ -115,4 +117,7 @@
       <button>Add Event</button>
     </form>
   </body>
+  <footer>
+    <a href="/events">Return to Event Index</a>
+  </footer>
 </html>

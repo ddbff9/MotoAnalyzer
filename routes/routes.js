@@ -1,6 +1,8 @@
 const express = require('express');
 const mysqlConnection = require('../utils/database');
 
+// To prevent connection timeout, the below function sends a query to
+// mySQL Server every 5 seconds:
 setInterval(function () {
   mysqlConnection.query('SELECT 1');
 }, 5000);
@@ -26,7 +28,15 @@ Router.get('/results/new', (req, res) => {
       (err, results, fields)=>{
         if(!err) {
           let sessions = results;
-          res.render('results/new',{ classIds, sessions})
+          mysqlConnection.query("SELECT Id, Name FROM Rider ORDER BY Name;",
+          (err, results, fields)=>{
+            if(!err) {
+              let riders = results;
+              res.render('results/new',{ classIds, sessions, riders })
+            } else {
+              console.log(err);
+            }
+          });
         } else {
           console.log(err);
         }
@@ -38,10 +48,10 @@ Router.get('/results/new', (req, res) => {
 });
 
 Router.post('/results', async (req, res)=>{
-  const sql = "SET @Rider_Name = ?; SET @Event_Id = ?; SET @Class_Id = ?; SET @Session_Id=?;  SET @Position = ?; CALL Add_or_Update_Result(@Rider_Name, @Event_Id, @Class_Id, @Session_Id,  @Position);";
+  const sql = "SET @Id =0; SET @Rider_Id = ?; SET @Event_Id = ?; SET @Class_Id = ?; SET @Session_Id=?;  SET @Position = ?; CALL Add_or_Update_Result(@Id, @Rider_Id, @Event_Id, @Class_Id, @Session_Id,  @Position);";
 
   const createNewResult = mysqlConnection.query(sql,[
-    req.body.Event_Results.Rider_Name,
+    req.body.Event_Results.Rider_Id,
     req.body.Event_Results.Event_Id,
     req.body.Event_Results.Class_Id,
     req.body.Event_Results.Session_Id,

@@ -1,7 +1,7 @@
-const UserSelections = require('../userSelections');
+const UserSelections = require('../class_definitions/userSelections');
 
 // Example of user selections class being created:
-let testSelections = new UserSelections(1,['Eli Tomac','Ken Roczen'],[1],['Anaheim, CA'],['Baseball'],['Hard-Pack'],[2],['Qualifying','Main Event'],['Avg Finish']);
+let testSelections = new UserSelections(1,['Eli Tomac','Ken Roczen'],[1],['Anaheim, CA'],['Baseball'],[1],['Hard-Pack'],[2],['Qualifying','Main Event'],['Avg Finish']);
 
 test('the UserSelections object has desired properties', ()=>{
   expect(testSelections).toHaveProperty('user_id');
@@ -44,6 +44,11 @@ test('the testSelections.attributes object as correct attributes', ()=>{
       "category": "Venue",
       "value": "Baseball",
       },
+    {
+        "attribute": "Open_Air",
+        "category": "Venue",
+        "value": 1,
+        },
     {
       "attribute": "Soil_Type",
       "category": "Track",

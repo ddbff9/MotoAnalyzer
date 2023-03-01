@@ -1,11 +1,6 @@
 const express = require('express');
+const { exit } = require('process');
 const mysqlConnection = require('../utils/database');
-
-// To prevent connection timeout, the below function sends a query to
-// mySQL Server every 5 seconds:
-setInterval(function () {
-  mysqlConnection.query('SELECT 1');
-}, 5000);
 
 const Router = express.Router();
 
@@ -141,11 +136,17 @@ Router.get('/events/:id', (req,res)=>{
   [req.params.id],
   (err, results,fields)=> {
   if(!err){
+    if(results[0] == undefined){
+      res.status(404).send("Sorry cannot find that Event!");
+      exit
+    } else {
+
     let event = results[0];
     mysqlConnection.query(" SELECT Rider.Name AS Rider_Name,Event_Class.Name AS Event_Class,Event_Session.Name AS Session_Type,Event_Results.Position AS Position FROM (((((Event_Results JOIN Rider ON ((Rider.Id = Event_Results.Rider_Id)))    JOIN Event ON ((Event.Id = Event_Results.Event_Id))) JOIN Event_Class ON ((Event_Class.Id = Event_Results.Class_Id))) JOIN Event_Session ON ((Event_Results.Session_Id = Event_Session.Id)))) WHERE Event.Id = ? GROUP BY Session_Type, Position;",[req.params.id],(err, results, fields)=>{
       let eventResults = results;
       res.render('events/show', { event, eventResults });
     })
+  }
 
   }else {
     console.log(err);
@@ -209,8 +210,13 @@ Router.get('/venues/:id', async (req,res)=>{
     [req.params.id],
     (err, results,fields)=> {
     if(!err){
+      if(results[0] == undefined){
+        res.status(404).send("Sorry cannot find that venue!");
+        exit
+      } else {
       let venue = results[0]
       res.render('venues/show', { venue });
+      };
     }else {
       console.log(err);
     }
@@ -259,8 +265,13 @@ Router.get('/riders/:id', async (req,res)=>{
     [req.params.id],
     (err, results,fields)=> {
     if(!err){
-      let rider = results[0]
-      res.render('riders/show', { rider });
+      if(results[0] == undefined){
+        res.status(404).send("Sorry cannot find that Rider!");
+        exit
+      } else {
+        let rider = results[0]
+        res.render('riders/show', { rider });
+      }
     }else {
       console.log(err);
     }

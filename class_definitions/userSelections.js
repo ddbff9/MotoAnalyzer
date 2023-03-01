@@ -15,7 +15,6 @@ class UserSelections{
     this.setDataAttributes('Venue','Open_Air',venue_open_air);
     this.setDataAttributes('Track','Soil_Type',soil_type_list);
     this.setDataAttributes('Track','Whoops',whoop_section_list);
-    // this.getQueryParameters();
   }
   
   // Constructor function to create an object for each data attribute the user selected:

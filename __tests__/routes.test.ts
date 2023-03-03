@@ -36,7 +36,7 @@ describe('venues',()=>{
   describe('get venues/:id route', ()=>{
     describe('given the venue does not exist',()=>{
       it('should return a 404', async ()=>{
-        const eventId = 'event-123';
+        const eventId = 'venue-123';
         await supertest(app).get(`/venues/${eventId}`).expect(404)
       })
     });

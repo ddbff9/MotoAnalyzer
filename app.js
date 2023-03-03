@@ -10,8 +10,6 @@ app.listen(3000, ()=>{
   console.log('Serving on port 3000')
 });
 
-
-
 // To prevent connection timeout, the below function sends a query to
 // mySQL Server every 5 seconds:
 // setInterval(function () {

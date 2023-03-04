@@ -1,6 +1,7 @@
 const express = require('express');
 const { exit } = require('process');
 const mysqlConnection = require('../utils/database');
+const Rider = require('../models/Rider');
 
 const Router = express.Router();
 
@@ -227,19 +228,15 @@ Router.get('/venues/:id', async (req,res)=>{
 // ********************************
 // ********* RIDER ROUTES *********
 // ********************************
-Router.get('/riders', (req, res) => {
-  mysqlConnection.query(
-    "SELECT * FROM Rider ORDER BY Name;",
-    (err, results, fields) => {
-      if(!err) {
-        let riders = results;
-        res.render('riders/index', {riders});
-      } else {
-        console.log(err);
-      }
-    }
-  )
-});
+
+Router.get('/riders', async (req, res) =>{
+  try {
+    let riders = await Rider.findAll();
+    res.render('riders/index', {riders});
+  } catch (err) {
+    console.log(err);
+  }
+})
 
 Router.get('/riders/new', (req,res)=>{
   res.render('riders/new')

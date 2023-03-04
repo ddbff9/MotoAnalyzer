@@ -1,5 +1,4 @@
-// Creates connection to MotoAnlatics DB stored on web, while keeping these credentials private.
-const {motoanal_db} = require('../__private__/environment')
+
 
 printUserSelectionsQueryOutput = async (userSelections) => {
   await console.table(await getUserSelectionsQueryOutput(userSelections))

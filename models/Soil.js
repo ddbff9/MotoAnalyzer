@@ -1,19 +1,18 @@
 const Sequelize = require('sequelize');
 const sequelize = require('./index');
-const { gt, lte, ne, in: opIn, or } = Sequelize.Op;
 const { DataTypes } = Sequelize;
 
-const Rider = sequelize.define('Rider', {
+const Soil = sequelize.define('Event_Soil', {
   Id: {
     type: DataTypes.INTEGER(11),
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
   },
-  Name: {
+  Type: {
     type: DataTypes.STRING(45),
     allowNull: false,
   },
 });
 
-module.exports = Rider;
+module.exports = Soil;

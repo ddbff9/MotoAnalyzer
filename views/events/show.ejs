@@ -21,17 +21,17 @@
       <% } %></p>
       <p># of Whoop Sections: <%= event.Whoop_Section %></p>
       <p># of Sand Sections: <%= event.Sand_Section %></p>
-      <p>Soil Id: <%= event.Soil_Type %></p>
+      <p>Soil Type: <%= event.Event_Soil.Type %></p>
       <h1>450SX Main Event Results:</h1>
       <table border = "1">
         <tr>
           <th>Rider</th>
           <th>Position</th>
         </tr>
-        <%for(result of eventResults) { %>
-        <% if(result.Session_Type=='Main Event'  && result.Event_Class == '450SX'){%>
+        <%for(result of results) { %>
+        <% if(result.Event_Session.Name=='Main Event'  && result.Event_Class.Name == '450SX'){%>
           <tr>
-            <td><%= result.Rider_Name %></td>
+            <td><%= result.Rider.Name %></td>
             <td><%= result.Position %></td>
           </tr>
 
@@ -44,10 +44,10 @@
           <th>Rider</th>
           <th>Position</th>
         </tr>
-        <%for(result of eventResults) { %>
-        <% if(result.Session_Type=='Qualifying' && result.Event_Class == '450SX'){%>
+        <%for(result of results) { %>
+        <% if(result.Event_Session.Name=='Qualifying' && result.Event_Class.Name == '450SX'){%>
           <tr>
-            <td><%= result.Rider_Name %></td>
+            <td><%= result.Rider.Name %></td>
             <td><%= result.Position %></td>
           </tr>
 

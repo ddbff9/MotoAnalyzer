@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Venue</title>
+  </head>
+  <body>
+    <h1>Add a New Venue!</h1>
+    <form action="/venues" method="POST">
+      <div>
+        <label for="venueName">Name</label>
+        <input type="text" name="Venue[Name]" id="venueName" />
+      </div>
+      <div>
+        <label for="venueType">Stadium Type: </label>
+        <select name="Venue[Type_Id]" id="venueType">
+          <option value=" "></option>
+          <% for (let stadium of stadiums) {%>
+            <option value=<%= stadium.Id %>><%= stadium.Type %></option>
+          <%}%>
+        </select>
+      </div>
+      <div>
+        <label for="venueOpenAir">Open Air: </label>
+
+        <input
+          type="radio"
+          id="venueOpenAirYes"
+          name="Venue[Open_Air]"
+          value=1
+        />
+        <label for="venueOpenAirYes">Yes</label>
+        <input
+          type="radio"
+          id="venueOpenAirNo"
+          name="Venue[Open_Air]"
+          value=0
+        />
+        <label for="venueOpenAirNo">No</label>
+      </div>
+      
+      <div>
+        <label for="venueStreet">Street:</label>
+        <input type="text" name="Venue[Street]" id="venueStreet" />
+      </div>
+
+      <div>
+        <label for="venueCity">City:</label>
+        <input type="text" name="Venue[City]" id="venueCity" />
+      </div>
+
+      <div>
+        <label for="venueState">State: </label>
+        <select name="Venue[State]" id="venueState">
+          <option value="AL">AL</option>
+          <option value="AK">AK</option>
+          <option value="AZ">AZ</option>
+          <option value="AR">AR</option>
+          <option value="CA">CA</option>
+          <option value="CO">CO</option>
+          <option value="CT">CT</option>
+          <option value="DE">DE</option>
+          <option value="FL">FL</option>
+          <option value="GA">GA</option>
+          <option value="HI">HI</option>
+          <option value="ID">ID</option>
+          <option value="IL">IL</option>
+          <option value="IN">IN</option>
+          <option value="IA">IA</option>
+          <option value="KS">KS</option>
+          <option value="KY">KY</option>
+          <option value="LA">LA</option>
+          <option value="ME">ME</option>
+          <option value="MD">MD</option>
+          <option value="MA">MA</option>
+          <option value="MI">MI</option>
+          <option value="MS">MS</option>
+          <option value="MO">MO</option>
+          <option value="MT">MT</option>
+          <option value="NE">NE</option>
+          <option value="NV">NV</option>
+          <option value="NH">NH</option>
+          <option value="NJ">NJ</option>
+          <option value="NM">NM</option>
+          <option value="NY">NY</option>
+          <option value="NC">NC</option>
+          <option value="ND">ND</option>
+          <option value="OH">OH</option>
+          <option value="OK">OK</option>
+          <option value="OR">OR</option>
+          <option value="PA">PA</option>
+          <option value="RI">RI</option>
+          <option value="SC">SC</option>
+          <option value="SD">SD</option>
+          <option value="TN">TN</option>
+          <option value="TX">TX</option>
+          <option value="UT">UT</option>
+          <option value="VT">VT</option>
+          <option value="WA">WA</option>
+          <option value="WV">WV</option>
+          <option value="WI">WI</option>
+          <option value="WY">WY</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="venueZipcode">Zipcode:</label>
+        <input type="text" name="Venue[Zipcode]" id="venueZipcode" />
+      </div>
+
+      <button>Add Venue</button>
+    </form>
+  </body>
+  <footer>
+    <a href="/events">Return to Index</a>
+  </footer>
+</html>

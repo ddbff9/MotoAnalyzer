@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Result</title>
+  </head>
+  <body>
+    <h1>Add a New Result!</h1>
+    <form action="/results" method="POST">
+      <div>
+        <label for="resultsRiderName">Rider Name: </label>
+        <select name="Event_Results[Rider_Id]" id="resultsRiderName">
+          <option value=" "></option>
+          <% for (let rider of riders) {%>
+            <option value=<%= rider.Id %>><%= rider.Name %></option>
+          <%}%>
+        </select>
+        <a href="/riders/new">Add a New Rider</a>
+      </div>
+      <div>
+        <label for="resultsEventId">Event Id: </label>
+        <input type="text" name="Event_Results[Event_Id]" id="resultsEventId" />
+      </div>
+      <div>
+        <label for="resultsClassId">Class: </label>
+        <select name="Event_Results[Class_Id]" id="resultsClassId">
+          <option value=" "></option>
+          <% for (let classId of classIds) {%>
+            <option value=<%= classId.Id %>><%= classId.Name %></option>
+          <%}%>
+        </select>
+      </div>
+      <div>
+        <label for="resultsSessionId">Session:</label>
+        <select name="Event_Results[Session_Id]" id="resultsSessionId">
+          <option value=" "></option>
+          <% for (let session of sessions) {%>
+            <option value=<%= session.Id %>><%= session.Name %></option>
+          <%}%>
+        </select>
+      </div>
+      <div>
+        <label for="resultsPosition">Position: </label>
+        <input type="text" name="Event_Results[Position]" id="resultsPosition" />
+      </div>
+      <button>Add Result</button>
+    </form>
+  </body>
+  <footer>
+    <a href="/admin">Return to Admin Portal</a>
+  </footer>
+</html>

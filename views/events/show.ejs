@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Show</title>
+  </head>
+  <body>
+    <h1><%= event.Event_Name %></h1>
+    <h1><%= event.Gate_Drop.toLocaleDateString() %></h1>
+    <h1><%= event.Gate_Drop.toLocaleTimeString() %> CST</h1>  
+    <h2><%= event.Venue_Name %></h2>
+    <h3><%= event.Location %></h3>
+    <p>Region: <%= event.Region %></p>
+    <p>Round: <%= event.Round_Number %></p>
+    <p>Triple Crown: <%if(event.Triple_Crown === 1){%>
+       Yes
+      <%} else { %>
+        No
+      <% } %></p>
+      <p># of Whoop Sections: <%= event.Whoop_Section %></p>
+      <p># of Sand Sections: <%= event.Sand_Section %></p>
+      <p>Soil Type: <%= event.Event_Soil.Type %></p>
+      <h1>450SX Main Event Results:</h1>
+      <table border = "1">
+        <tr>
+          <th>Rider</th>
+          <th>Position</th>
+        </tr>
+        <%for(result of results) { %>
+        <% if(result.Event_Session.Name=='Main Event'  && result.Event_Class.Name == '450SX'){%>
+          <tr>
+            <td><%= result.Rider.Name %></td>
+            <td><%= result.Position %></td>
+          </tr>
+
+        <% }%>
+        <% } %>
+      </table>
+      <h1>450SX Qualifying Results:</h1>
+      <table border = '1'>
+        <tr>
+          <th>Rider</th>
+          <th>Position</th>
+        </tr>
+        <%for(result of results) { %>
+        <% if(result.Event_Session.Name=='Qualifying' && result.Event_Class.Name == '450SX'){%>
+          <tr>
+            <td><%= result.Rider.Name %></td>
+            <td><%= result.Position %></td>
+          </tr>
+
+        <% }%>
+        <% } %>
+      </table>
+    <a href="/events">Return to Event Index</a>
+</html>

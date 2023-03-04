@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Event</title>
+  </head>
+  <body>
+    <h1>Add a New Event!</h1>
+    <form action="/events" method="POST">
+      <div>
+        <label for="eventType">Type</label>
+        <select name="Event[Type]" id="eventType">
+          <option value=" "></option>
+          <option value="SX">SX</option>
+          <option value="MX">MX</option>
+        </select>
+      </div>
+      <div>
+        <label for="eventName">Name</label>
+        <input type="text" name="Event[Name]" id="eventName" />
+      </div>
+      <div>
+        <label for="eventRegion">Region</label>
+        <select name="Event[Region]" id="eventRegion">
+          <option value=" "></option>
+          <option value="E">E</option>
+          <option value="W">W</option>
+          <option value="E/W">E/W</option>
+        </select>
+      </div>
+      <div>
+        <label for="eventVenue">Venue: </label>
+        <select name="Event[Venue_ID]" id="eventVenue">
+          <option value=" "></option>
+          <% for (let venue of venues) {%>
+            <option value=<%= venue.Id %>><%= venue.Name %></option>
+          <%}%>
+        </select>
+        <a href="/venues/new">Add a New Venue</a>
+      </div>
+      <div>
+        <label for="eventRound">Round: </label>
+        <select name="Event[Round_Number]" id="eventRound">
+          <option value=" "></option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+          <option value="13">13</option>
+          <option value="14">14</option>
+          <option value="15">15</option>
+          <option value="16">16</option>
+          <option value="17">17</option>
+        </select>
+      </div>
+      <div>
+        <label for="eventTripleCrown">Triple Crown: </label>
+
+        <input
+          type="radio"
+          id="eventTripleCrownYes"
+          name="Event[Triple_Crown]"
+          value="1"
+        />
+        <label for="eventTripleCrownYes">Yes</label>
+        <input
+          type="radio"
+          id="eventTripleCrownNo"
+          name="Event[Triple_Crown]"
+          value="0"
+        />
+        <label for="eventTripleCrownNo">No</label>
+      </div>
+      <div>
+        <label for="eventDate">Date:</label>
+        <input type="datetime-local" name="Event[Gate_Drop]" id="eventDate" />
+      </div>
+      <div>
+        <label for="eventWhoops"># of Whoop Sections: </label>
+        <select name="Event[Whoop_Section]" id="eventWhoops">
+          <option value=" "></option>
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
+      </div>
+      <div>
+        <label for="eventSand"># of Sand Sections: </label>
+        <select name="Event[Sand_Section]" id="eventSand">
+          <option value=" "></option>
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
+      </div>
+      <div>
+        <label for="eventSoil">Soil Type: </label>
+        <select name="Event[Soil_Id]" id="eventSoil">
+          <option value=" "></option>
+          <% for (let soil of soils) {%>
+            <option value=<%= soil.Id %>><%= soil.Type %></option>
+          <%}%>
+        </select>
+      </div>
+      <button>Add Event</button>
+    </form>
+  </body>
+  <footer>
+    <a href="/events">Return to Event Index</a>
+  </footer>
+</html>

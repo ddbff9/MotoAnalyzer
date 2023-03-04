@@ -1,7 +1,7 @@
 const {printUserSelectionsQueryOutput} = require('../helpers/dataOutput');
 
 class UserSelections{
-  constructor(user_id, rider_list, round_list, location_list, venue_type_list, soil_type_list, whoop_section_list, session_type_list, result_type){
+  constructor(user_id, rider_list, round_list, location_list, venue_type_list, venue_open_air, soil_type_list, whoop_section_list, session_type_list, result_type){
     this.user_id = user_id;
     this.riders = rider_list,
     this.sessions = session_type_list;
@@ -12,9 +12,9 @@ class UserSelections{
     this.setDataAttributes('Series','Round',round_list);
     this.setDataAttributes('Venue','Location',location_list);
     this.setDataAttributes('Venue','Venue_Type',venue_type_list);
+    this.setDataAttributes('Venue','Open_Air',venue_open_air);
     this.setDataAttributes('Track','Soil_Type',soil_type_list);
     this.setDataAttributes('Track','Whoops',whoop_section_list);
-    // this.getQueryParameters();
   }
   
   // Constructor function to create an object for each data attribute the user selected:
@@ -35,7 +35,7 @@ class UserSelections{
   };
 
   viewQuery(){
-    printUserSelectionsQueryOutput(this)
+    printUserSelectionsQueryOutput(this);
   }
 
 };

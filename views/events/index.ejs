@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Events</title>
+</head>
+<body>
+  <h1>All Events!</h1>
+  <ul>
+    <% for (let event of events) {%>
+      <li><a href="/events/<%= event.Id %>">Round <%= event.Round_Number %> - <%= event.Name %></a></li>
+    <%}%>
+  </ul>
+</body>
+<footer>
+  <a href="/events/new">Add a New Event</a>
+</footer>
+</html>

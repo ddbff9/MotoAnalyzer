@@ -1,6 +1,5 @@
 const express = require('express');
 const { exit } = require('process');
-const mysqlConnection = require('../utils/database');
 const Rider = require('../models/Rider');
 const Event = require('../models/Event');
 const Venue = require('../models/Venue');

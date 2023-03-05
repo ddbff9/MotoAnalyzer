@@ -1,14 +1,9 @@
-const mysqlConnection = require('../utils/database');
-
 const supertest = require('supertest');
 const createServer = require('../utils/server');
 
-const app = createServer();
 
-afterAll(async () =>{
-  await mysqlConnection.end();
-  await console.log('mySQL Database has been disconnected!');
-})
+
+const app = createServer();
 
 describe('events',()=>{
   describe('get events/:id route', ()=>{

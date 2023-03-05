@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const sequelize = require('./index');
 
-const { gt, lte, ne, in: opIn, or } = Sequelize.Op;
+const { gt, lte, ne, in: opIn, or, and } = Sequelize.Op;
 const { DataTypes } = Sequelize;
 
 const Event_Class = sequelize.define('Event_Class', {

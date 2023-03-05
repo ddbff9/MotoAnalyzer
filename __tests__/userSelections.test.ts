@@ -1,5 +1,7 @@
 const UserSelections = require('../class_definitions/userSelections');
 
+
+
 // Example of user selections class being created:
 let testSelections = new UserSelections(1,['Eli Tomac','Ken Roczen'],[1],['Anaheim, CA'],['Baseball'],[1],['Hard-Pack'],[2],['Qualifying','Main Event'],['Avg Finish']);
 
@@ -40,7 +42,7 @@ test('the testSelections.attributes object has correct attributes', ()=>{
       "value": "Anaheim, CA",
       },
     {
-      "attribute": "Venue_Type",
+      "attribute": "Venue_Types",
       "category": "Venue",
       "value": "Baseball",
       },

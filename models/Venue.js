@@ -1,39 +1,37 @@
 const Sequelize = require('sequelize');
 const sequelize = require('./index');
-const Event = require('./Event');
 const Venue_Type = require('./Venue_Type');
 
-const { gt, lte, ne, in: opIn, or } = Sequelize.Op;
 const { DataTypes } = Sequelize;
 
 const Venue = sequelize.define('Venue', {
-  Id: {
+  id: {
     type: DataTypes.INTEGER(11),
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
   },
-  Name: {
+  name: {
     type: DataTypes.STRING(45),
     allowNull: false,
   },
-  Open_Air: {
+  open_air: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
   },
-  Street: {
+  street: {
     type: DataTypes.STRING(45),
     allowNull: false,
   },
-  City: {
+  city: {
     type: DataTypes.STRING(45),
     allowNull: false,
   },
-  State: {
+  state: {
     type: DataTypes.CHAR(2),
     allowNull: false,
   },
-  Zipcode: {
+  zipcode: {
     type: DataTypes.INTEGER(11),
     allowNull: false,
   },
@@ -41,7 +39,7 @@ const Venue = sequelize.define('Venue', {
 
 Venue_Type.hasMany(Venue, {
   foreignKey: {
-    name: 'Type_Id',
+    name: 'type_id',
     type: DataTypes.INTEGER(11),
     allowNull: false,
   },
@@ -49,7 +47,7 @@ Venue_Type.hasMany(Venue, {
 
 Venue.belongsTo(Venue_Type, {
   foreignKey: {
-    name: 'Type_Id',
+    name: 'type_id',
     type: DataTypes.INTEGER(11),
     allowNull: false,
   },

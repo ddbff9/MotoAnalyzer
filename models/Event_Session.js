@@ -1,22 +1,20 @@
 const Sequelize = require('sequelize');
 const sequelize = require('./index');
-const Result = require('./Result');
 
-const { gt, lte, ne, in: opIn, or } = Sequelize.Op;
 const { DataTypes } = Sequelize;
 
 const Event_Session = sequelize.define('Event_Session', {
-  Id: {
+  id: {
     type: DataTypes.INTEGER(11),
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
   },
-  Name: {
+  name: {
     type: DataTypes.STRING(45),
     allowNull: false,
   },
-  Abbreviation: {
+  abbreviation: {
     type: DataTypes.CHAR(2),
     allowNull: false,
   },

@@ -14,7 +14,7 @@
         <select name="Event_Results[Rider_Id]" id="resultsRiderName">
           <option value=" "></option>
           <% for (let rider of riders) {%>
-            <option value=<%= rider.Id %>><%= rider.Name %></option>
+            <option value=<%= rider.id %>><%= rider.name %></option>
           <%}%>
         </select>
         <a href="/riders/new">Add a New Rider</a>
@@ -28,7 +28,7 @@
         <select name="Event_Results[Class_Id]" id="resultsClassId">
           <option value=" "></option>
           <% for (let classId of classIds) {%>
-            <option value=<%= classId.Id %>><%= classId.Name %></option>
+            <option value=<%= classId.id %>><%= classId.name %></option>
           <%}%>
         </select>
       </div>
@@ -37,7 +37,7 @@
         <select name="Event_Results[Session_Id]" id="resultsSessionId">
           <option value=" "></option>
           <% for (let session of sessions) {%>
-            <option value=<%= session.Id %>><%= session.Name %></option>
+            <option value=<%= session.id %>><%= session.name %></option>
           <%}%>
         </select>
       </div>

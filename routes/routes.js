@@ -8,8 +8,6 @@ const Result = require('../models/Result');
 const Event_Class = require('../models/Event_Class');
 const Event_Session = require('../models/Event_Session');
 const Venue_Type = require('../models/Venue_Type');
-const Sequelize = require('sequelize');
-const sequelize = require('../models/index');
 const { createAmaId } = require('../utils/helper_functions');
 
 const Router = express.Router();
@@ -28,20 +26,20 @@ Router.get('/results/new', async (req, res) => {
   try {
     // Get Class Name and Id for Drop Down List:
     let classIds = await Event_Class.findAll({
-      attributes: ['Id', 'Name'],
-      order: ['Name'],
+      attributes: ['id','name'],
+      order: ['name'],
     });
 
     // Get Session Name and Id for Drop Down List:
     let sessions = await Event_Session.findAll({
-      attributes: ['Id', 'Name'],
-      order: ['Name'],
+      attributes: ['id','name'],
+      order: ['name'],
     });
 
     // Get Roder Name and Id for Drop Down List:
     let riders = await Rider.findAll({
-      attributes: ['Id', 'Name'],
-      order: ['Name'],
+      attributes: ['id','name'],
+      order: ['name'],
     });
 
     res.render('results/new', { classIds, sessions, riders });
@@ -54,11 +52,11 @@ Router.post('/results', async (req, res) => {
   try {
     // Insert result from page into database:
     let result = Result.build({
-      Rider_Id: req.body.Event_Results.Rider_Id,
-      Event_Id: req.body.Event_Results.Event_Id,
-      Class_Id: req.body.Event_Results.Class_Id,
-      Session_Id: req.body.Event_Results.Session_Id,
-      Position: req.body.Event_Results.Position,
+      rider_id: req.body.Event_Results.Rider_Id,
+      event_id: req.body.Event_Results.Event_Id,
+      class_id: req.body.Event_Results.Class_Id,
+      session_id: req.body.Event_Results.Session_Id,
+      position: req.body.Event_Results.Position,
     });
     await result.save();
     res.redirect('/events');
@@ -84,14 +82,14 @@ Router.get('/events/new', async (req, res) => {
   try {
     // Get Venue Name and Id for Drop Down list:
     let venues = await Venue.findAll({
-      attributes: ['Id', 'Name'],
-      order: ['Name'],
+      attributes: ['id','name'],
+      order: ['name'],
     });
 
     // Get Soil Type and Id for Drop Down list:
     let soils = await Soil.findAll({
-      attributes: ['Id', 'Type'],
-      order: ['Type'],
+      attributes: ['id', 'type'],
+      order: ['type'],
     });
 
     res.render('events/new', { venues, soils });
@@ -103,21 +101,21 @@ Router.get('/events/new', async (req, res) => {
 Router.post('/events', async (req, res) => {
   try {
     let event = Event.build({
-      Ama_Id: createAmaId(
+      ama_id: createAmaId(
         req.body.Event.Type,
         req.body.Event.Gate_Drop,
         req.body.Event.Round_Number
       ),
-      Type: req.body.Event.Type,
-      Name: req.body.Event.Name,
-      Region: req.body.Event.Region,
-      Venue_Id: req.body.Event.Venue_ID,
-      Round_Number: req.body.Event.Round_Number,
-      Triple_Crown: req.body.Event.Triple_Crown,
-      Gate_Drop: req.body.Event.Gate_Drop,
-      Whoop_Section: req.body.Event.Whoop_Section,
-      Sand_Section: req.body.Event.Sand_Section,
-      Soil_Id: req.body.Event.Soil_Id,
+      type: req.body.Event.Type,
+      name: req.body.Event.Name,
+      region: req.body.Event.Region,
+      venue_id: req.body.Event.Venue_ID,
+      round_number: req.body.Event.Round_Number,
+      triple_crown: req.body.Event.Triple_Crown,
+      gate_drop: req.body.Event.Gate_Drop,
+      whoop_section: req.body.Event.Whoop_Section,
+      sand_section: req.body.Event.Sand_Section,
+      soil_id: req.body.Event.Soil_Id,
     });
     await event.save();
     res.redirect('/events');
@@ -133,7 +131,7 @@ Router.get('/events/:id', async (req, res) => {
         { model: Venue, required: true },
         { model: Soil, required: true },
       ],
-      where: { Id: req.params.id },
+      where: { id: req.params.id },
     });
     if (events[0] == undefined) {
       res.status(404).send('Sorry cannot find that Event!');
@@ -147,8 +145,8 @@ Router.get('/events/:id', async (req, res) => {
             { model: Event_Class, required: true },
             { model: Event_Session, required: true },
           ],
-          where: { Event_Id: req.params.id },
-          order: ['Position'],
+          where: { event_id: req.params.id },
+          order: ['position'],
         });
         res.render('events/show', { event, results });
       });
@@ -174,8 +172,8 @@ Router.get('/venues/new', async (req, res) => {
   try {
     // Get Venue_Type Type and Id for Drop Down list:
     let stadiums = await Venue_Type.findAll({
-      attributes: ['Id', 'Type'],
-      order: ['Type'],
+      attributes: ['id', 'type'],
+      order: ['type'],
     });
 
     res.render('venues/new', { stadiums });
@@ -188,13 +186,13 @@ Router.post('/venues', async (req, res) => {
   try {
     // Insert new venue into database:
     let venue = Venue.build({
-      Name: req.body.Venue.Name,
-      Type_Id: req.body.Venue.Type_Id,
-      Open_Air: req.body.Venue.Open_Air,
-      Street: req.body.Venue.Street,
-      City: req.body.Venue.City,
-      State: req.body.Venue.State,
-      Zipcode: req.body.Venue.Zipcode,
+      name: req.body.Venue.Name,
+      type_id: req.body.Venue.Type_Id,
+      open_air: req.body.Venue.Open_Air,
+      street: req.body.Venue.Street,
+      city: req.body.Venue.City,
+      state: req.body.Venue.State,
+      zipcode: req.body.Venue.Zipcode,
     });
     await venue.save();
     res.redirect('/Venues');
@@ -206,7 +204,7 @@ Router.post('/venues', async (req, res) => {
 Router.get('/venues/:id', async (req, res) => {
   try {
     let venues = await Venue.findAll({
-      where: { Id: req.params.id },
+      where: { id: req.params.id },
     });
     if (venues[0] == undefined) {
       res.status(404).send('Sorry cannot find that Venue!');
@@ -241,7 +239,7 @@ Router.get('/riders/new', (req, res) => {
 Router.post('/riders', async (req, res) => {
   try {
     let rider = Rider.build({
-      Name: req.body.Rider.Name,
+      name: req.body.Rider.Name,
     });
     await rider.save();
     res.redirect('/riders');
@@ -253,8 +251,8 @@ Router.post('/riders', async (req, res) => {
 Router.get('/riders/:id', async (req, res) => {
   try {
     let riders = await Rider.findAll({
-      attributes: ['Id', 'Name'],
-      where: { Id: req.params.id },
+      attributes: ['id','name'],
+      where: { id: req.params.id },
     });
 
     if (riders[0] == undefined) {

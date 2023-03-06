@@ -5,17 +5,16 @@ const Event = require('./Event');
 const Event_Class = require('./Event_Class');
 const Event_Session = require('./Event_Session');
 
-const { gt, lte, ne, in: opIn, or } = Sequelize.Op;
 const { DataTypes } = Sequelize;
 
 const Result = sequelize.define('Event_Result', {
-  Id: {
+  id: {
     type: DataTypes.INTEGER(11),
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
   },
-  Position: {
+  position: {
     type: DataTypes.INTEGER(11),
     allowNull: false,
   },
@@ -23,7 +22,7 @@ const Result = sequelize.define('Event_Result', {
 
 Event.hasMany(Result, {
   foreignKey: {
-    name: 'Event_Id',
+    name: 'event_id',
     type: DataTypes.INTEGER(11),
     allowNull: false,
   },
@@ -31,31 +30,31 @@ Event.hasMany(Result, {
 
 Result.belongsTo(Event, {
   foreignKey: {
-    name: 'Event_Id',
+    name: 'event_id',
     type: DataTypes.INTEGER(11),
     allowNull: false,
   },
-})
+});
 
 Event_Class.hasMany(Result, {
   foreignKey: {
-    name: 'Class_Id',
-    type: DataTypes.INTEGER(11),
+    name: 'class_id',
+    type: DataTypes.CHAR(2),
     allowNull: false,
   },
 });
 
 Result.belongsTo(Event_Class, {
   foreignKey: {
-    name: 'Class_Id',
-    type: DataTypes.INTEGER(11),
+    name: 'class_id',
+    type: DataTypes.CHAR(2),
     allowNull: false,
   },
-})
+});
 
 Event_Session.hasMany(Result, {
   foreignKey: {
-    name: 'Session_Id',
+    name: 'session_id',
     type: DataTypes.INTEGER(11),
     allowNull: false,
   },
@@ -63,15 +62,15 @@ Event_Session.hasMany(Result, {
 
 Result.belongsTo(Event_Session, {
   foreignKey: {
-    name: 'Session_Id',
+    name: 'session_id',
     type: DataTypes.INTEGER(11),
     allowNull: false,
   },
-})
+});
 
 Rider.hasMany(Result, {
   foreignKey: {
-    name: 'Rider_Id',
+    name: 'rider_id',
     type: DataTypes.INTEGER(11),
     allowNull: false,
   },
@@ -79,10 +78,10 @@ Rider.hasMany(Result, {
 
 Result.belongsTo(Rider, {
   foreignKey: {
-    name: 'Rider_Id',
+    name: 'rider_id',
     type: DataTypes.INTEGER(11),
     allowNull: false,
   },
-})
+});
 
 module.exports = Result;

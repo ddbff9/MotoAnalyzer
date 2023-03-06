@@ -7,21 +7,21 @@
     <title>Show</title>
   </head>
   <body>
-    <h1><%= event.Event_Name %></h1>
-    <h1><%= event.Gate_Drop.toLocaleDateString() %></h1>
-    <h1><%= event.Gate_Drop.toLocaleTimeString() %> CST</h1>  
-    <h2><%= event.Venue_Name %></h2>
-    <h3><%= event.Location %></h3>
-    <p>Region: <%= event.Region %></p>
-    <p>Round: <%= event.Round_Number %></p>
-    <p>Triple Crown: <%if(event.Triple_Crown === 1){%>
+    <h1><%= event.event_name %></h1>
+    <h1><%= event.gate_drop.toLocaleDateString() %></h1>
+    <h1><%= event.gate_drop.toLocaleTimeString() %> CST</h1>  
+    <h2><%= event.venue_name %></h2>
+    <h3><%= event.location %></h3>
+    <p>Region: <%= event.region %></p>
+    <p>Round: <%= event.round_number %></p>
+    <p>Triple Crown: <%if(event.triple_crown === 1){%>
        Yes
       <%} else { %>
         No
       <% } %></p>
-      <p># of Whoop Sections: <%= event.Whoop_Section %></p>
-      <p># of Sand Sections: <%= event.Sand_Section %></p>
-      <p>Soil Type: <%= event.Event_Soil.Type %></p>
+      <p># of Whoop Sections: <%= event.whoop_section %></p>
+      <p># of Sand Sections: <%= event.sand_section %></p>
+      <p>Soil Type: <%= event.Event_Soil.type %></p>
       <h1>450SX Main Event Results:</h1>
       <table border = "1">
         <tr>
@@ -29,10 +29,10 @@
           <th>Position</th>
         </tr>
         <%for(result of results) { %>
-        <% if(result.Event_Session.Name=='Main Event'  && result.Event_Class.Name == '450SX'){%>
+        <% if(result.Event_Session.name=='Main Event'  && result.Event_Class.name == '450SX'){%>
           <tr>
-            <td><%= result.Rider.Name %></td>
-            <td><%= result.Position %></td>
+            <td><%= result.Rider.name %></td>
+            <td><%= result.position %></td>
           </tr>
 
         <% }%>
@@ -45,10 +45,10 @@
           <th>Position</th>
         </tr>
         <%for(result of results) { %>
-        <% if(result.Event_Session.Name=='Qualifying' && result.Event_Class.Name == '450SX'){%>
+        <% if(result.Event_Session.name=='Qualifying' && result.Event_Class.name == '450SX'){%>
           <tr>
-            <td><%= result.Rider.Name %></td>
-            <td><%= result.Position %></td>
+            <td><%= result.Rider.name %></td>
+            <td><%= result.position %></td>
           </tr>
 
         <% }%>

@@ -35,7 +35,7 @@
         <select name="Event[Venue_ID]" id="eventVenue">
           <option value=" "></option>
           <% for (let venue of venues) {%>
-            <option value=<%= venue.Id %>><%= venue.Name %></option>
+            <option value=<%= venue.id %>><%= venue.name %></option>
           <%}%>
         </select>
         <a href="/venues/new">Add a New Venue</a>
@@ -110,7 +110,7 @@
         <select name="Event[Soil_Id]" id="eventSoil">
           <option value=" "></option>
           <% for (let soil of soils) {%>
-            <option value=<%= soil.Id %>><%= soil.Type %></option>
+            <option value=<%= soil.id %>><%= soil.type %></option>
           <%}%>
         </select>
       </div>

@@ -16,4 +16,7 @@ sequelize.authenticate().then(()=>{
   console.log("Error connecting to database!");
 });
 
+// sequelize.sync({ alter: true });
+
+
 module.exports = sequelize;

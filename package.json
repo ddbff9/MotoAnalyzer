@@ -4,6 +4,12 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "make-model": "npx sequelize-cli model:generate --name Event_Class --attributes Id:integer,Name:string,Displacement:integer",
+    "make-seed": "npx sequelize-cli seed:generate --name demo-user",
+    "migrate": "npx sequelize-cli db:migrate",
+    "migrate-undo": "npx sequelize-cli db:migrate:undo",
+    "seed": "npx sequelize-cli db:seed:all",
+    "seed-undo": "npx sequelize-cli db:seed:undo",
     "start": "nodemon app.js",
     "test": "jest"
   },

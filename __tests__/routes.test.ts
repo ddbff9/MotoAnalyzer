@@ -1,7 +1,11 @@
+import sequelize from "../models";
+
 const supertest = require('supertest');
 const createServer = require('../utils/server');
 
-
+// afterAll(()=>{
+//   app.close()
+// })
 
 const app = createServer();
 

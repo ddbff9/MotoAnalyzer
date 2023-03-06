@@ -3,51 +3,50 @@ const sequelize = require('./index');
 const Soil = require('./Soil');
 const Venue = require('./Venue');
 
-const { gt, lte, ne, in: opIn, or } = Sequelize.Op;
 const { DataTypes } = Sequelize;
 
 const Event = sequelize.define('Event', {
-  Id: {
+  id: {
     type: DataTypes.INTEGER(11),
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
   },
-  Ama_Id: {
+  ama_id: {
     type: DataTypes.STRING(45),
   },
-  Type: {
+  type: {
     type: DataTypes.CHAR(2),
     allowNull: false,
   },
-  Name: {
+  name: {
     type: DataTypes.STRING(45),
     allowNull: false,
   },
-  Region: {
+  region: {
     type: DataTypes.STRING(3),
   },
-  Round_Number: {
+  round_number: {
     type: DataTypes.INTEGER(11),
   },
-  Triple_Crown: {
+  triple_crown: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
-  Gate_Drop: {
+  gate_drop: {
     type: DataTypes.DATE,
   },
-  Whoop_Section: {
+  whoop_section: {
     type: DataTypes.INTEGER(11),
   },
-  Sand_Section: {
+  sand_section: {
     type: DataTypes.INTEGER(11),
   },
 });
 
 Venue.hasMany(Event, {
   foreignKey: {
-    name: 'Venue_Id',
+    name: 'venue_id',
     type: DataTypes.INTEGER(11),
     allowNull: false
   },
@@ -55,7 +54,7 @@ Venue.hasMany(Event, {
 
 Event.belongsTo(Venue, {
   foreignKey: {
-    name: 'Venue_Id',
+    name: 'venue_id',
     type: DataTypes.INTEGER(11),
     allowNull: false
   },
@@ -64,7 +63,7 @@ Event.belongsTo(Venue, {
 
 Soil.hasMany(Event, {
   foreignKey: {
-    name: 'Soil_Id',
+    name: 'soil_id',
     type: DataTypes.INTEGER(11),
     allowNull: false
   },
@@ -72,7 +71,7 @@ Soil.hasMany(Event, {
 
 Event.belongsTo(Soil, {
   foreignKey: {
-    name: 'Soil_Id',
+    name: 'soil_id',
     type: DataTypes.INTEGER(11),
     allowNull: false
   },

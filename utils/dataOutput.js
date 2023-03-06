@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const Results_Filtered = require('../models/Results_Filtered');
+const sequelize = require('../models');
 
 printUserSelectionsQueryOutput = async (userSelections) => {
   await console.table(await getUserSelectionsQueryOutput(userSelections));
@@ -7,6 +7,7 @@ printUserSelectionsQueryOutput = async (userSelections) => {
 
 getUserSelectionsQueryOutput = async (userSelections) => {
   const queryResults = await getQueryResults(userSelections);
+  console.log(queryResults)
   const riders = getUniqueRiders(queryResults);
   const sessions = getUniqueSessions(queryResults);
   const attributes = getUniqueAttributes(queryResults);
@@ -90,6 +91,7 @@ getQueryResults = async (userSelections) => {
           parameter.Value
         )
       );
+      console.log(result)
       let attribute = createColumnHeader(
         parameter.Attribute_Type,
         parameter.Value
@@ -125,17 +127,35 @@ getQueryParameters = (userSelections) => {
 
 getResults = async (rider, session, attr_type, attr) => {
   try {
-    let results = await Results_Filtered.findAll({
-      attributes: {
-        exclude: ['id'],
-      },
-      where: Sequelize.and(
-        { Rider_Name: rider },
-        { Session_Type: session },
-        { [attr_type]: attr }
-      ),
-    });
+    let [results, metadata] = await sequelize.query(`
+    SELECT * 
+    FROM (
+
+    SELECT Riders.name AS Rider_Name, 
+        Events.id AS Event_Id, 
+          Venues.open_air AS Open_Air, 
+          Events.whoop_section AS Whoops, 
+          Events.sand_section AS Sand, 
+          Events.round_number AS Round, 
+          CONCAT(Venues.city,', ', Venues.state)AS Location, 
+          Venue_Types.type AS Venue_Types, 
+          Event_Soils.type AS Soil_Type, 
+          Event_Sessions.name AS Session_Type, 
+          Event_Results.position AS Position 
+          
+          FROM Event_Results
+          
+          JOIN Events ON Events.id = Event_Results.event_id 
+          JOIN Venues ON Venues.id = Events.venue_id  
+          JOIN Venue_Types ON Venue_Types.id = Venues.type_id 
+          JOIN Event_Soils ON Event_Soils.id = Events.soil_id 
+          JOIN Event_Sessions ON Event_Sessions.id = Event_Results.session_id
+          JOIN Riders ON Riders.id = Event_Results.rider_id
+          
+    ) AS Results
+    WHERE Results.Rider_Name = '${rider}' AND Results.Session_Type = '${session}' AND ${attr_type} = '${attr}' ;`);
     return results;
+
   } catch (ex) {
     console.error(ex);
   }

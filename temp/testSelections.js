@@ -4,7 +4,7 @@ const UserSelections = require('../class_definitions/userSelections');
 function buildUserSelections(user){
   let userSelections = new UserSelections(user.id,                                              // User ID
                                             ['Eli Tomac','Cooper Webb', 'Ken Roczen', 'Kevin Moranz'],         // Rider_List
-                                            [],                                               // Round_List
+                                            [5],                                               // Round_List
                                             [],                                   // Location_List
                                             ['Baseball','Football'],                                      // Venue_Type_List
                                             [0,1],                                               // Venue_Open_Air

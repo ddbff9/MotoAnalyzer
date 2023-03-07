@@ -1,6 +1,8 @@
 const UserSelections = require('../class_definitions/userSelections');
 
-
+beforeEach(()=>{
+  jest.useFakeTimers();
+})
 
 // Example of user selections class being created:
 let testSelections = new UserSelections(1,['Eli Tomac','Ken Roczen'],[1],['Anaheim, CA'],['Baseball'],[1],['Hard-Pack'],[2],['Qualifying','Main Event'],['Avg Finish']);

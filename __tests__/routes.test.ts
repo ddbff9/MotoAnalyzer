@@ -3,9 +3,9 @@ import sequelize from "../models";
 const supertest = require('supertest');
 const createServer = require('../utils/server');
 
-// afterAll(()=>{
-//   app.close()
-// })
+// beforeEach(()=>{
+//   jest.useFakeTimers();
+// });
 
 const app = createServer();
 
@@ -15,6 +15,16 @@ describe('events',()=>{
       it('should return a 404', async ()=>{
         const eventId = 'event-123';
         await supertest(app).get(`/events/${eventId}`).expect(404)
+      })
+    });
+
+    describe('given the event does exist',()=>{
+      it('should return a 200 status and the event.', async ()=>{
+        const eventId = 1;
+        const {body, statusCode} = await supertest(app)
+          .get(`/events/${eventId}`)
+          expect(statusCode).toBe(200)
+          console.log('body:', body[0])
       })
     });
   })

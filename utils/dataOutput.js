@@ -7,7 +7,6 @@ printUserSelectionsQueryOutput = async (userSelections) => {
 
 getUserSelectionsQueryOutput = async (userSelections) => {
   const queryResults = await getQueryResults(userSelections);
-  console.log(queryResults)
   const riders = getUniqueRiders(queryResults);
   const sessions = getUniqueSessions(queryResults);
   const attributes = getUniqueAttributes(queryResults);
@@ -91,7 +90,6 @@ getQueryResults = async (userSelections) => {
           parameter.Value
         )
       );
-      console.log(result)
       let attribute = createColumnHeader(
         parameter.Attribute_Type,
         parameter.Value

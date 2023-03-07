@@ -13,11 +13,14 @@ const routes = require('../routes/routes');
 // https://www.w3schools.com/nodejs/ref_path.asp
 const path = require('path');
 
+const methodOverride = require('method-override')
+
 const exp = require('constants');
 
 function createServer(){
   const app = express();
   app.use(bodyParser.json());
+  app.use(methodOverride('_method'))
   app.use(express.urlencoded({extended: true}));
 
   // The app.use() function is used to mount the specified middleware function(s) at the

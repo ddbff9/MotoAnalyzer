@@ -26,19 +26,19 @@ Router.get('/results/new', async (req, res) => {
   try {
     // Get Class Name and Id for Drop Down List:
     let classIds = await Event_Class.findAll({
-      attributes: ['id','name'],
+      attributes: ['id', 'name'],
       order: ['name'],
     });
 
     // Get Session Name and Id for Drop Down List:
     let sessions = await Event_Session.findAll({
-      attributes: ['id','name'],
+      attributes: ['id', 'name'],
       order: ['name'],
     });
 
     // Get Roder Name and Id for Drop Down List:
     let riders = await Rider.findAll({
-      attributes: ['id','name'],
+      attributes: ['id', 'name'],
       order: ['name'],
     });
 
@@ -82,7 +82,7 @@ Router.get('/events/new', async (req, res) => {
   try {
     // Get Venue Name and Id for Drop Down list:
     let venues = await Venue.findAll({
-      attributes: ['id','name'],
+      attributes: ['id', 'name'],
       order: ['name'],
     });
 
@@ -155,6 +155,54 @@ Router.get('/events/:id', async (req, res) => {
     console.log(err);
   }
 });
+
+Router.get('/events/:id/edit', async (req, res) => {
+  // Lookup the event info by the primary key:
+  const event = await Event.findByPk(req.params.id);
+
+  // Get Venue Name and Id for Drop Down list:
+  let venues = await Venue.findAll({
+    attributes: ['id', 'name'],
+    order: ['name'],
+  });
+
+  // Get Soil Type and Id for Drop Down list:
+  let soils = await Soil.findAll({
+    attributes: ['id', 'type'],
+    order: ['type'],
+  });
+
+  // Render the edit page, with data for event, venues, and soil passed in:
+  res.render('events/edit', { event, venues, soils });
+});
+
+Router.put('/events/:id', async (req, res)=>{
+  const { id } = req.params;
+
+  try {
+    const result = await Event.update(
+      { ama_id: createAmaId(
+        req.body.Event.Type,
+        req.body.Event.Gate_Drop,
+        req.body.Event.Round_Number
+      ),
+      type: req.body.Event.Type,
+      name: req.body.Event.Name,
+      region: req.body.Event.Region,
+      venue_id: req.body.Event.Venue_ID,
+      round_number: req.body.Event.Round_Number,
+      triple_crown: req.body.Event.Triple_Crown,
+      gate_drop: req.body.Event.Gate_Drop,
+      whoop_section: req.body.Event.Whoop_Section,
+      sand_section: req.body.Event.Sand_Section,
+      soil_id: req.body.Event.Soil_Id, },
+      { where: {id: id} }
+    )
+    res.redirect(`${id}`)
+  } catch (err) {
+    throw(err)
+  }
+})
 
 // ********************************
 // ********* VENUE ROUTES *********
@@ -251,7 +299,7 @@ Router.post('/riders', async (req, res) => {
 Router.get('/riders/:id', async (req, res) => {
   try {
     let riders = await Rider.findAll({
-      attributes: ['id','name'],
+      attributes: ['id', 'name'],
       where: { id: req.params.id },
     });
 

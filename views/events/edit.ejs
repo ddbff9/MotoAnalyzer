@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Event</title>
+  </head>
+  <body>
+    <h1>Edit Event!</h1>
+    <form action="/events/<%= event.id %>?_method=PUT" method="POST">
+      <div>
+        <label for="eventType">Type</label>
+        <select name="Event[Type]" id="eventType">
+          <% if(event.type == 'SX'){%>
+            <option value="<%= event.type %>" selected><%= event.type %></option>
+            <option value="MX">MX</option>
+            <%} else {%>
+              <option value="<%= event.type %>" selected><%= event.type %></option>
+              <option value="SX">SX</option>
+          <% } %>
+        </select>
+      </div>
+      <div>
+        <label for="eventName">Name</label>
+        <input type="text" name="Event[Name]" id="eventName" value='<%= event.name %>' />
+      </div>
+      <div>
+        <label for="eventRegion">Region</label>
+        <select name="Event[Region]" id="eventRegion">
+          <% if(event.region == 'E'){%>
+            <option value="<%= event.region %>" selected><%= event.region %></option>
+            <option value="W">W</option>
+            <option value="E/W">E/W</option>
+
+            <%} else if(event.region == 'W'){%>
+              <option value="<%= event.region %>" selected><%= event.region %></option>
+              <option value="E">E</option>
+              <option value="E/W">E/W</option>
+          <% } else { %>
+              <option value="<%= event.region %>" selected><%= event.region %></option>
+              <option value="E">E</option>
+              <option value="W">W</option>
+          <% } %>
+        </select>
+      </div>
+      <div>
+        <label for="eventVenue">Venue: </label>
+        <select name="Event[Venue_ID]" id="eventVenue">
+          <% for (let venue of venues) {%>
+            <% if(event.venue_id == venue.id){%>
+                <option value=<%= venue.id %> selected><%= venue.name %></option>
+                <% } else { %>
+                  <option value=<%= venue.id %>><%= venue.name %></option>
+                <% } %>
+          <%}%>
+        </select>
+        <a href="/venues/new">Add a New Venue</a>
+      </div>
+      <div>
+        <label for="eventRound">Round: </label>
+        <select name="Event[Round_Number]" id="eventRound">
+          <% for(let i=1; i<18; i++){%>
+            <% if(event.round_number == i){ %>
+              <option value= <%= i %> selected><%= i %></option>
+            <% } else {%>
+              <option value=<%= i %>><%= i %></option>
+              <% } %>
+          <% } %>
+        </select>
+      </div>
+      <div>
+        <label for="eventTripleCrown">Triple Crown: </label>
+
+        <input
+          type="radio"
+          id="eventTripleCrownYes"
+          name="Event[Triple_Crown]"
+          value="1"
+          <%if(event.triple_crown == 1){ %>
+            checked
+            <% } %>
+        />
+        <label for="eventTripleCrownYes">Yes</label>
+        <input
+          type="radio"
+          id="eventTripleCrownNo"
+          name="Event[Triple_Crown]"
+          value="0"
+          <%if(event.triple_crown == 0){ %>
+            checked
+            <% } %>
+        />
+        <label for="eventTripleCrownNo">No</label>
+      </div>
+      <div>
+        <label for="eventDate">Date:</label>
+        <input type="datetime-local" name="Event[Gate_Drop]" id="eventDate" value="<%= event.gate_drop.toISOString().slice(0,16) %>"/>
+      </div>
+      <div>
+        <label for="eventWhoops"># of Whoop Sections: </label>
+        <select name="Event[Whoop_Section]" id="eventWhoops">
+          <% for(let i=0; i<5; i++){%>
+            <% if(event.whoop_section == i){ %>
+              <option value= <%= i %> selected><%= i %></option>
+            <% } else {%>
+              <option value=<%= i %>><%= i %></option>
+              <% } %>
+          <% } %>
+        </select>
+      </div>
+      <div>
+        <label for="eventSand"># of Sand Sections: </label>
+        <select name="Event[Sand_Section]" id="eventSand">
+          <% for(let i=0; i<5; i++){%>
+            <% if(event.sand_section == i){ %>
+              <option value= <%= i %> selected><%= i %></option>
+            <% } else {%>
+              <option value=<%= i %>><%= i %></option>
+              <% } %>
+          <% } %>
+        </select>
+      </div>
+      <div>
+        <label for="eventSoil">Soil Type: </label>
+        <select name="Event[Soil_Id]" id="eventSoil">
+          <% for (let soil of soils) {%>
+            <% if(event.soil_id == soil.id){%>
+                <option value=<%= soil.id %> selected><%= soil.type %></option>
+                <% } else { %>
+                  <option value=<%= soil.id %>><%= soil.type %></option>
+                <% } %>
+          <%}%>
+        </select>
+      </div>
+      <button>Update Event</button>
+    </form>
+  </body>
+  <footer>
+    <a href="/events/<%= event.id %>">Return to Event</a>
+  </footer>
+</html>

@@ -69,6 +69,8 @@ Router.post('/results', async (req, res) => {
 // ********* EVENT ROUTES *********
 // ********************************
 
+// ---------------- GET EVENTS ROUTE ----------------
+
 Router.get('/events', async (req, res) => {
   try {
     let events = await Event.findAll();
@@ -77,6 +79,8 @@ Router.get('/events', async (req, res) => {
     console.log(err);
   }
 });
+
+// ---------------- CREATE NEW EVENT ROUTES ----------------
 
 Router.get('/events/new', async (req, res) => {
   try {
@@ -124,6 +128,8 @@ Router.post('/events', async (req, res) => {
   }
 });
 
+// ---------------- GET EVENT BY ID ROUTE ----------------
+
 Router.get('/events/:id', async (req, res) => {
   try {
     let events = await Event.findAll({
@@ -155,6 +161,8 @@ Router.get('/events/:id', async (req, res) => {
     console.log(err);
   }
 });
+
+// ---------------- EDIT EVENT ROUTES ----------------
 
 Router.get('/events/:id/edit', async (req, res) => {
   // Lookup the event info by the primary key:
@@ -203,6 +211,7 @@ Router.put('/events/:id', async (req, res)=>{
     throw(err)
   }
 })
+
 
 // ********************************
 // ********* VENUE ROUTES *********

@@ -1,4 +1,3 @@
-const Sequelize = require('sequelize');
 const sequelize = require('../models');
 
 printUserSelectionsQueryOutput = async (userSelections) => {
@@ -174,4 +173,4 @@ getAveragePosition = (results) => {
   return averagePosition;
 };
 
-module.exports = { printUserSelectionsQueryOutput };
+module.exports = { getUserSelectionsQueryOutput };

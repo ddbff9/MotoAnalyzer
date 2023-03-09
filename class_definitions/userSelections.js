@@ -1,4 +1,3 @@
-const {printUserSelectionsQueryOutput} = require('../utils/dataOutput');
 
 class UserSelections{
   constructor(user_id, rider_list, round_list, location_list, venue_type_list, venue_open_air, soil_type_list, whoop_section_list, session_type_list, result_type){
@@ -7,7 +6,7 @@ class UserSelections{
     this.sessions = session_type_list;
     this.outputType = result_type;
     this.attributes= [];    
-
+    
     // Set Category, Attribute, and Value for selections that the user chose:
     this.setDataAttributes('Series','Round',round_list);
     this.setDataAttributes('Venue','Location',location_list);
@@ -28,16 +27,23 @@ class UserSelections{
       this.attributes.push(selection)
     }
   };
-
+  
   // TODO: Create a database table to save user queries in, then update this function to store the user selections to that table.
   saveQuery(){
     console.log(`User ${this.user_id} saved the query selections!`)
   };
+  
+  async viewQuery(){
+    // const {printUserSelectionsQueryOutput} = require('../utils/dataOutput');
+    const {getUserSelectionsQueryOutput} = require('../utils/dataOutput');
 
-  viewQuery(){
-    printUserSelectionsQueryOutput(this);
+    const output = await getUserSelectionsQueryOutput(this);
+
+    console.table(output);
+    return output;
+    // await printUserSelectionsQueryOutput(this);
   }
-
+  
 };
 
 module.exports = UserSelections;

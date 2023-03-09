@@ -24,6 +24,32 @@ module.exports = {
       },
     });
 
+    await queryInterface.createTable('Users', {
+      id: {
+        type: Sequelize.INTEGER(11),
+        primaryKey: true,
+        allowNull: false,
+        autoIncrement: true,
+      },
+      username: {
+        type: Sequelize.STRING(45),
+        allowNull: false,
+        unique: true,
+      },
+      password: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+    });
+
     await queryInterface.createTable('Event_Soils', {
       id: {
         type: Sequelize.INTEGER(11),

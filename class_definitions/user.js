@@ -1,9 +1,12 @@
 class User{
 
-  constructor(id, name, address, email, phone){
+  constructor(id, name, street, city, state, zipcode, email, phone){
     this.id = id;
     this.name = name;
-    this.address = address;
+    this.street = street;
+    this.city = city;
+    this.state = state;
+    this.zipcode = zipcode;
     this.email = email;
     this.phone = phone;
   }

@@ -3,20 +3,22 @@ const sequelize = require('./index');
 
 const { DataTypes } = Sequelize;
 
-const Event_Class = sequelize.define('Event_Class', {
+const User = sequelize.define('User', {
   id: {
-    type: DataTypes.CHAR(2),
+    type: DataTypes.INTEGER(11),
     primaryKey: true,
     allowNull: false,
+    autoIncrement: true,
   },
-  name: {
+  username: {
     type: DataTypes.STRING(45),
     allowNull: false,
+    unique: true,
   },
-  displacement: {
-    type: DataTypes.INTEGER(11),
+  password: {
+    type: DataTypes.STRING,
     allowNull: false,
   },
 });
 
-module.exports = Event_Class;
+module.exports = User;

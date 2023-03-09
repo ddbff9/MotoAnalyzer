@@ -1,4 +1,4 @@
-const createServer = require('./utils/server');
+const {createServer} = require('./utils/server');
 // const mysqlConnection = require('./utils/database');
 
 const app = createServer();

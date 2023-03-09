@@ -16,17 +16,24 @@ const path = require('path');
 const methodOverride = require('method-override')
 
 const exp = require('constants');
+const userRoutes = require('../routes/users');
+const eventRoutes = require('../routes/events');
+const adminRoutes = require('../routes/admin');
 
 function createServer(){
   const app = express();
   app.use(bodyParser.json());
   app.use(methodOverride('_method'))
   app.use(express.urlencoded({extended: true}));
-
+  
   // The app.use() function is used to mount the specified middleware function(s) at the
   // path which is being specified.
   // https://www.geeksforgeeks.org/express-js-app-use-function/
   app.use(routes);
+  app.use('/events',eventRoutes)
+  app.use('/users',userRoutes)
+  app.use('/admin',adminRoutes)
+  app.use('/',adminRoutes)
 
   // A template engine enables you to use static template files in your application.
   // At runtime, the template engine replaces variables in a template file with 
@@ -44,4 +51,6 @@ function createServer(){
   return app;
 }
 
-module.exports = createServer;
+
+
+module.exports = {createServer};

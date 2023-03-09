@@ -1,6 +1,3 @@
-const Sequelize = require('sequelize');
-const sequelize = require('../models');
-
 printUserSelectionsQueryOutput = async (userSelections) => {
   await console.table(await getUserSelectionsQueryOutput(userSelections));
 };
@@ -124,6 +121,7 @@ getQueryParameters = (userSelections) => {
 };
 
 getResults = async (rider, session, attr_type, attr) => {
+  const sequelize = require('../models');
   try {
     let [results, metadata] = await sequelize.query(`
     SELECT * 
@@ -174,4 +172,4 @@ getAveragePosition = (results) => {
   return averagePosition;
 };
 
-module.exports = { printUserSelectionsQueryOutput };
+module.exports = { getUserSelectionsQueryOutput, getAveragePosition , getResults};

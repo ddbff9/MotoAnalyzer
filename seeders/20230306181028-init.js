@@ -25,6 +25,20 @@ module.exports = {
     );
 
     await queryInterface.bulkInsert(
+      'Users',
+      [
+        {
+          id: 1,
+          username: 'admin',
+          password: '$2b$12$XSZhsHjd.tKoFVbJbIkN0.wawDv/FGkWfl92VFdIvyfVd5ZkLIgiG',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ],
+      {}
+    );
+
+    await queryInterface.bulkInsert(
       'Riders',
       [
         {
@@ -5131,6 +5145,7 @@ module.exports = {
     await queryInterface.bulkDelete('Event_Soils', null, {});
     await queryInterface.bulkDelete('Event_Sessions', null, {});
     await queryInterface.bulkDelete('Riders', null, {});
+    await queryInterface.bulkDelete('Users', null, {});
     await queryInterface.bulkDelete('Event_Classes', null, {});
   },
 };

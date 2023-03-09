@@ -120,11 +120,14 @@ getQueryParameters = (userSelections) => {
   return queryParameters;
 };
 
+// Returns a list of positions for races that contain the passed
+// rider, sessino, attr_type, and attr.
+// Example: Eli Tomac, Main Event, Whoops, 1
 getResults = async (rider, session, attr_type, attr) => {
   const sequelize = require('../models');
   try {
     let [results, metadata] = await sequelize.query(`
-    SELECT * 
+    SELECT Position 
     FROM (
 
     SELECT Riders.name AS Rider_Name, 
@@ -150,7 +153,11 @@ getResults = async (rider, session, attr_type, attr) => {
           
     ) AS Results
     WHERE Results.Rider_Name = '${rider}' AND Results.Session_Type = '${session}' AND ${attr_type} = '${attr}' ;`);
-    return results;
+    let results_output = [];
+    results.forEach((result)=>{
+      results_output.push(result['Position']);
+    })
+    return results_output;
 
   } catch (ex) {
     console.error(ex);
@@ -161,9 +168,9 @@ getAveragePosition = (results) => {
   let numerator = 0;
   let denominator = results.length;
 
-  for (const result of results) {
-    numerator += result['Position'];
-  }
+  results.forEach((result)=>{
+    numerator += result
+  })
 
   let averagePosition = numerator / denominator;
   // averagePosition = averagePosition.toFixed(2);

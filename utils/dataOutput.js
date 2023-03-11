@@ -1,7 +1,208 @@
-printUserSelectionsQueryOutput = async (userSelections) => {
-  await console.table(await getUserSelectionsQueryOutput(userSelections));
+// Take provided userSelections and build a list of objects
+// that can be queried in the database.
+getQueryParameters = (userSelections) => {
+  // Initialize empty list to store output into
+  let queryParameters = [];
+
+  // Loop over each rider selected:
+  for (const rider of userSelections.riders) {
+    // For each rider selected, loop over each session selected:
+    for (const session of userSelections.sessions) {
+      // For each session selected, loop over each attribute selected:
+      for (const attribute of userSelections.attributes) {
+        // Create an object for each parameter selected:
+        let parameters = {
+          Rider_Name: rider,
+          Session_Type: session,
+          Attribute_Type: attribute.attribute,
+          Value: attribute.value,
+        };
+        queryParameters.push(parameters);
+      }
+    }
+  }
+  return queryParameters;
 };
 
+// Returns a list of positions for races that contain the passed
+// rider, sessino, attr_type, and attr.
+// Example: Eli Tomac, Main Event, Whoops, 1
+getResults = async (rider, session, attr_type, attr) => {
+  const {queryResults} = require('./databaseFunctions');
+
+  let results = await queryResults(rider, session, attr_type, attr);
+
+  let results_output = [];
+  results.forEach((result) => {
+    results_output.push(result['Position']);
+  });
+  return results_output;
+};
+
+
+
+// Takes a list of integers, and returns the average:
+getAveragePosition = (results) => {
+  let numerator = 0;
+  let denominator = results.length;
+
+  results.forEach((result) => {
+    numerator += result;
+  });
+
+  let averagePosition = numerator / denominator;
+
+  averagePosition = Math.round((averagePosition + Number.EPSILON) * 10) / 10;
+
+  return averagePosition;
+};
+
+// Takes a list of integers, and returns the lowest value:
+getMinPosition = (results) => {
+  let minFinish = 1000;
+
+  results.forEach((result) => {
+    if(result < minFinish){
+      minFinish = result
+    }
+  });
+
+  return minFinish;
+};
+
+// Takes a list of integers, and returns the highest value:
+getMaxPosition = (results) => {
+  let maxFinish = 0;
+
+  results.forEach((result) => {
+    if(result > maxFinish){
+      maxFinish = result
+    }
+  });
+  return maxFinish;
+};
+
+// Creates column names for attributes that are represented in the
+// database as values:
+createColumnHeader = (attribute, value) => {
+  if (attribute == 'Round') {
+    return `${attribute} ${value}`;
+  } else if (attribute == 'Soil_Type') {
+    return `${value} Soil`;
+  } else if (attribute == 'Whoops') {
+    return `${value} Set(s) of Whoops`;
+  } else if (attribute == 'Sand') {
+    return `${value} Set(s) of Sand`;
+  } else if (attribute == 'Open_Air') {
+    if (value == 0) {
+      return `Covered Stadium`;
+    } else {
+      return 'Open-Air Stadium';
+    }
+  } else {
+    return `${value}`;
+  }
+};
+
+// Queries the database for the supplied userSelections:
+getQueryResults = async (userSelections) => {
+  let queries = [];
+  const parameters = getQueryParameters(userSelections);
+
+  for (const parameter of parameters) {
+    if (userSelections.outputType == 'Avg Finish') {
+      let result = getAveragePosition(
+        await getResults(
+          parameter.Rider_Name,
+          parameter.Session_Type,
+          parameter.Attribute_Type,
+          parameter.Value
+        )
+      );
+      let attribute = createColumnHeader(
+        parameter.Attribute_Type,
+        parameter.Value
+      );
+
+      queries.push({
+        Rider: parameter.Rider_Name,
+        Session: parameter.Session_Type,
+        [attribute]: result,
+      });
+    } else if (userSelections.outputType == 'Best Finish') {
+      let result = getMinPosition(
+        await getResults(
+          parameter.Rider_Name,
+          parameter.Session_Type,
+          parameter.Attribute_Type,
+          parameter.Value
+        )
+      );
+      let attribute = createColumnHeader(
+        parameter.Attribute_Type,
+        parameter.Value
+      );
+
+      queries.push({
+        Rider: parameter.Rider_Name,
+        Session: parameter.Session_Type,
+        [attribute]: result,
+      });
+    } else if (userSelections.outputType == 'Worst Finish') {
+      let result = getMaxPosition(
+        await getResults(
+          parameter.Rider_Name,
+          parameter.Session_Type,
+          parameter.Attribute_Type,
+          parameter.Value
+        )
+      );
+      let attribute = createColumnHeader(
+        parameter.Attribute_Type,
+        parameter.Value
+      );
+
+      queries.push({
+        Rider: parameter.Rider_Name,
+        Session: parameter.Session_Type,
+        [attribute]: result,
+      });
+    }
+  };
+
+  return queries;
+};
+
+// Take a list of Objects, and return a list of unique rider names:
+getUniqueRiders = (results) => {
+  return [...new Set(results.map((results) => results.Rider))];
+};
+
+// Takes a list of Objects and returns a list of unique session names:
+getUniqueSessions = (results) => {
+  return [...new Set(results.map((results) => results.Session))];
+};
+
+// Returns a list of all the unique keys in a list of objects:
+getUniqueAttributes = (results) => {
+  let uniqueAttributes = [];
+
+  for (const result of results) {
+    // create list of keys from the results array
+    let attributes = Object.keys(result);
+
+    // Loop over each key and add it to the uniqueAttributes list
+    // if the list doesn't already contain it.
+    for (const attribute of attributes) {
+      if (!uniqueAttributes.includes(attribute)) {
+        uniqueAttributes.push(attribute);
+      }
+    }
+  }
+  return uniqueAttributes;
+};
+
+// Take various inputs and return a list containing the query output:
 getUserSelectionsQueryOutput = async (userSelections) => {
   const queryResults = await getQueryResults(userSelections);
   const riders = getUniqueRiders(queryResults);
@@ -33,150 +234,16 @@ getUserSelectionsQueryOutput = async (userSelections) => {
   return queryOutput;
 };
 
-getUniqueAttributes = (results) => {
-  let uniqueAttributes = [];
-
-  for (const result of results) {
-    let attributes = Object.keys(result);
-    for (const attribute of attributes) {
-      if (!uniqueAttributes.includes(attribute)) {
-        uniqueAttributes.push(attribute);
-      }
-    }
-  }
-  return uniqueAttributes;
+module.exports = {
+  getQueryParameters,
+  getQueryResults,
+  getUserSelectionsQueryOutput,
+  getAveragePosition,
+  getResults,
+  getUniqueAttributes,
+  getUniqueRiders,
+  getUniqueSessions,
+  createColumnHeader,
+  getMinPosition,
+  getMaxPosition,
 };
-
-getUniqueRiders = (results) => {
-  return [...new Set(results.map((results) => results.Rider))];
-};
-
-getUniqueSessions = (results) => {
-  return [...new Set(results.map((results) => results.Session))];
-};
-
-createColumnHeader = (attribute, value) => {
-  if (attribute == 'Round') {
-    return `${attribute} ${value}`;
-  } else if (attribute == 'Soil_Type') {
-    return `${value} Soil`;
-  } else if (attribute == 'Whoops') {
-    return `${value} Set(s) of Whoops`;
-  } else if (attribute == 'Open_Air') {
-    if (value == 0) {
-      return `Covered Stadium`;
-    } else {
-      return 'Open-Air Stadium';
-    }
-  } else {
-    return `${value}`;
-  }
-};
-
-getQueryResults = async (userSelections) => {
-  let queries = [];
-  const parameters = getQueryParameters(userSelections);
-
-  for (const parameter of parameters) {
-    if (userSelections.outputType == 'Avg Finish') {
-      let result = getAveragePosition(
-        await getResults(
-          parameter.Rider_Name,
-          parameter.Session_Type,
-          parameter.Attribute_Type,
-          parameter.Value
-        )
-      );
-      let attribute = createColumnHeader(
-        parameter.Attribute_Type,
-        parameter.Value
-      );
-
-      queries.push({
-        Rider: parameter.Rider_Name,
-        Session: parameter.Session_Type,
-        [attribute]: result,
-      });
-    }
-  }
-  return queries;
-};
-
-getQueryParameters = (userSelections) => {
-  let queryParameters = [];
-  for (const rider of userSelections.riders) {
-    for (const session of userSelections.sessions) {
-      for (const attribute of userSelections.attributes) {
-        let parameters = {
-          Rider_Name: rider,
-          Session_Type: session,
-          Attribute_Type: attribute.attribute,
-          Value: attribute.value,
-        };
-        queryParameters.push(parameters);
-      }
-    }
-  }
-  return queryParameters;
-};
-
-// Returns a list of positions for races that contain the passed
-// rider, sessino, attr_type, and attr.
-// Example: Eli Tomac, Main Event, Whoops, 1
-getResults = async (rider, session, attr_type, attr) => {
-  const sequelize = require('../models');
-  try {
-    let [results, metadata] = await sequelize.query(`
-    SELECT Position 
-    FROM (
-
-    SELECT Riders.name AS Rider_Name, 
-        Events.id AS Event_Id, 
-          Venues.open_air AS Open_Air, 
-          Events.whoop_section AS Whoops, 
-          Events.sand_section AS Sand, 
-          Events.round_number AS Round, 
-          CONCAT(Venues.city,', ', Venues.state)AS Location, 
-          Venue_Types.type AS Venue_Types, 
-          Event_Soils.type AS Soil_Type, 
-          Event_Sessions.name AS Session_Type, 
-          Event_Results.position AS Position 
-          
-          FROM Event_Results
-          
-          JOIN Events ON Events.id = Event_Results.event_id 
-          JOIN Venues ON Venues.id = Events.venue_id  
-          JOIN Venue_Types ON Venue_Types.id = Venues.type_id 
-          JOIN Event_Soils ON Event_Soils.id = Events.soil_id 
-          JOIN Event_Sessions ON Event_Sessions.id = Event_Results.session_id
-          JOIN Riders ON Riders.id = Event_Results.rider_id
-          
-    ) AS Results
-    WHERE Results.Rider_Name = '${rider}' AND Results.Session_Type = '${session}' AND ${attr_type} = '${attr}' ;`);
-    let results_output = [];
-    results.forEach((result)=>{
-      results_output.push(result['Position']);
-    })
-    return results_output;
-
-  } catch (ex) {
-    console.error(ex);
-  }
-};
-
-getAveragePosition = (results) => {
-  let numerator = 0;
-  let denominator = results.length;
-
-  results.forEach((result)=>{
-    numerator += result
-  })
-
-  let averagePosition = numerator / denominator;
-  // averagePosition = averagePosition.toFixed(2);
-  averagePosition = Math.round((averagePosition + Number.EPSILON) * 10) / 10;
-
-  return averagePosition;
-};
-
-module.exports = { getUserSelectionsQueryOutput, getAveragePosition , getResults};

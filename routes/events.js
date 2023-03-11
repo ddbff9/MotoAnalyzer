@@ -3,7 +3,6 @@ const { exit } = require('process');
 
 const Router = express.Router();
 
-// *** EVENT HANDLER FUNCIONS **
 Router.get('/', async (req, res) => {
   const { getAllEvents } = require('../utils/databaseFunctions');
   const events = await getAllEvents();

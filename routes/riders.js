@@ -1,6 +1,5 @@
 const express = require('express');
 const { exit } = require('process');
-const Rider = require('../models/Rider');
 
 const Router = express.Router();
 
@@ -9,8 +8,9 @@ const Router = express.Router();
 // ********************************
 
 Router.get('/', async (req, res) => {
+  const {getAllRiders} = require('../utils/databaseFunctions')
   try {
-    let riders = await Rider.findAll();
+    let riders = await getAllRiders();
     res.render('riders/index', { riders });
   } catch (err) {
     console.log(err);
@@ -22,11 +22,9 @@ Router.get('/new', (req, res) => {
 });
 
 Router.post('/', async (req, res) => {
+  const {addRider} = require('../utils/databaseFunctions')
   try {
-    let rider = Rider.build({
-      name: req.body.Rider.Name,
-    });
-    await rider.save();
+    await addRider(req);
     res.redirect('/');
   } catch (err) {
     console.log(err);
@@ -34,17 +32,19 @@ Router.post('/', async (req, res) => {
 });
 
 Router.get('/:id', async (req, res) => {
+  const {getRiderByID} = require('../utils/databaseFunctions')
   try {
-    let riders = await Rider.findAll({
-      attributes: ['id', 'name'],
-      where: { id: req.params.id },
-    });
+    // let riders = await Rider.findAll({
+    //   attributes: ['id', 'name'],
+    //   where: { id: req.params.id },
+    // });
 
-    if (riders[0] == undefined) {
+    const rider = await getRiderByID(req);
+
+    if (rider == undefined) {
       res.status(404).send('Sorry cannot find that Rider!');
       exit;
     } else {
-      let rider = riders[0];
       res.render('riders/show', { rider });
     }
   } catch (err) {

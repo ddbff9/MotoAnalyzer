@@ -44,6 +44,72 @@ getAllEvents = async () => {
   }
 };
 
+getAllRiders = async () => {
+  const Rider = require('../models/Rider');
+  try {
+    return await Rider.findAll();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+getAllVenues = async () => {
+  const Venue = require('../models/Venue');
+  try {
+    return await Venue.findAll();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+getVenueTypeDDList = async()=>{
+  const Venue_Type = require('../models/Venue_Type')
+  try{
+    return await Venue_Type.findAll({
+      attributes: ['id', 'type'],
+      order: ['type'],
+    });
+  } catch(err){
+    throw(err);
+  }
+}
+
+getClassDDList = async () => {
+  const Event_Class = require('../models/Event_Class');
+  try {
+    return await Event_Class.findAll({
+      attributes: ['id', 'name'],
+      order: ['name'],
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+getSessionDDList = async () => {
+  const Event_Session = require('../models/Event_Session');
+  try {
+    return await Event_Session.findAll({
+      attributes: ['id', 'name'],
+      order: ['name'],
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+getRiderDDList = async () => {
+  const Rider = require('../models/Rider');
+  try {
+    return await Rider.findAll({
+      attributes: ['id', 'name'],
+      order: ['name'],
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 getVenueDDList = async () => {
   const Venue = require('../models/Venue');
   try {
@@ -95,28 +161,98 @@ addEvent = async (req) => {
   }
 };
 
+addResult = async (req) => {
+  const Result = require('../models/Result');
+
+  try {
+    // Insert result from page into database:
+    let result = Result.build({
+      rider_id: req.body.Event_Results.Rider_Id,
+      event_id: req.body.Event_Results.Event_Id,
+      class_id: req.body.Event_Results.Class_Id,
+      session_id: req.body.Event_Results.Session_Id,
+      position: req.body.Event_Results.Position,
+    });
+    await result.save();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+addRider = async (req) => {
+  const Rider = require('../models/Rider');
+
+  try {
+    let rider = Rider.build({
+      name: req.body.Rider.Name,
+    });
+    await rider.save();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+addUser = async (req) => {
+  const bcrypt = require('bcrypt');
+  const User = require('../models/User');
+  const { password, username } = req.body.User;
+  const hash = await bcrypt.hash(password, 12);
+
+  try {
+    let user = User.build({
+      username: username,
+      password: hash,
+    });
+
+    await user.save();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+getUserByUserName = async (req) => {
+  const User = require('../models/User');
+  try {
+    return await User.findOne({ where: { username: req.body.User.username } });
+  } catch (err) {
+    throw err;
+  }
+};
+
+isValidPassword = async (user, req) => {
+  const bcrypt = require('bcrypt');
+
+  try {
+    return await bcrypt.compare(req.body.User.password, user.password);
+  } catch (err) {
+    throw err;
+  }
+};
+
 updateEvent = async (req) => {
   const Event = require('../models/Event');
   const { createAmaId } = require('../utils/helper_functions');
   try {
-    let event = await Event.update({
-      ama_id: createAmaId(
-        req.body.Event.Type,
-        req.body.Event.Gate_Drop,
-        req.body.Event.Round_Number
-      ),
-      type: req.body.Event.Type,
-      name: req.body.Event.Name,
-      region: req.body.Event.Region,
-      venue_id: req.body.Event.Venue_ID,
-      round_number: req.body.Event.Round_Number,
-      triple_crown: req.body.Event.Triple_Crown,
-      gate_drop: req.body.Event.Gate_Drop,
-      whoop_section: req.body.Event.Whoop_Section,
-      sand_section: req.body.Event.Sand_Section,
-      soil_id: req.body.Event.Soil_Id,
-    },
-    {where: {id: req.params.id}});
+    let event = await Event.update(
+      {
+        ama_id: createAmaId(
+          req.body.Event.Type,
+          req.body.Event.Gate_Drop,
+          req.body.Event.Round_Number
+        ),
+        type: req.body.Event.Type,
+        name: req.body.Event.Name,
+        region: req.body.Event.Region,
+        venue_id: req.body.Event.Venue_ID,
+        round_number: req.body.Event.Round_Number,
+        triple_crown: req.body.Event.Triple_Crown,
+        gate_drop: req.body.Event.Gate_Drop,
+        whoop_section: req.body.Event.Whoop_Section,
+        sand_section: req.body.Event.Sand_Section,
+        soil_id: req.body.Event.Soil_Id,
+      },
+      { where: { id: req.params.id } }
+    );
   } catch (err) {
     console.log(err);
   }
@@ -134,6 +270,16 @@ getEventByID = async (req) => {
       ],
       where: { id: req.params.id },
     });
+  } catch (err) {
+    throw err;
+  }
+};
+
+getRiderByID = async (req) => {
+  const Rider = require('../models/Rider');
+
+  try {
+    return await Rider.findByPk(req.params.id);
   } catch (err) {
     throw err;
   }
@@ -158,17 +304,29 @@ getResultsById = async (req) => {
       order: ['position'],
     });
   } catch (err) {
-    throw(err);
+    throw err;
   }
 };
 
 module.exports = {
   queryResults,
   getAllEvents,
+  getAllRiders,
+  getAllVenues,
   getVenueDDList,
   getSoilDDList,
+  getVenueTypeDDList,
   addEvent,
+  addRider,
+  addResult,
+  addUser,
   getEventByID,
   getResultsById,
-  updateEvent
+  getRiderByID,
+  getUserByUserName,
+  updateEvent,
+  getClassDDList,
+  getSessionDDList,
+  getRiderDDList,
+  isValidPassword,
 };

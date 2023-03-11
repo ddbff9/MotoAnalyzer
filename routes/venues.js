@@ -8,22 +8,21 @@ const Router = express.Router();
 // ********************************
 // ********* VENUE ROUTES *********
 // ********************************
-Router.get('/venues', async (req, res) => {
+Router.get('/', async (req, res) => {
+  const {getAllVenues} = require('../utils/databaseFunctions')
   try {
-    let venues = await Venue.findAll();
+    let venues = await getAllVenues();
     res.render('venues/index', { venues });
   } catch (err) {
     console.log(err);
   }
 });
 
-Router.get('/venues/new', async (req, res) => {
+Router.get('/new', async (req, res) => {
+  const {getVenueTypeDDList} = require('../utils/databaseFunctions')
   try {
     // Get Venue_Type Type and Id for Drop Down list:
-    let stadiums = await Venue_Type.findAll({
-      attributes: ['id', 'type'],
-      order: ['type'],
-    });
+    let stadiums = await getVenueTypeDDList();
 
     res.render('venues/new', { stadiums });
   } catch (err) {
@@ -31,7 +30,7 @@ Router.get('/venues/new', async (req, res) => {
   }
 });
 
-Router.post('/venues', async (req, res) => {
+Router.post('/', async (req, res) => {
   try {
     // Insert new venue into database:
     let venue = Venue.build({
@@ -44,13 +43,13 @@ Router.post('/venues', async (req, res) => {
       zipcode: req.body.Venue.Zipcode,
     });
     await venue.save();
-    res.redirect('/Venues');
+    res.redirect('/');
   } catch (err) {
     console.log(err);
   }
 });
 
-Router.get('/venues/:id', async (req, res) => {
+Router.get('/:id', async (req, res) => {
   try {
     let venues = await Venue.findAll({
       where: { id: req.params.id },

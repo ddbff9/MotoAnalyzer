@@ -6,9 +6,6 @@ const express = require('express');
 // https://www.npmjs.com/package/body-parser
 const bodyParser = require('body-parser');
 
-// Helper file where routes are defined:
-const routes = require('../routes/routes');
-
 // The Path module provides a way of working with directories and file paths.
 // https://www.w3schools.com/nodejs/ref_path.asp
 const path = require('path');
@@ -18,6 +15,9 @@ const methodOverride = require('method-override')
 const exp = require('constants');
 const userRoutes = require('../routes/users');
 const eventRoutes = require('../routes/events');
+const riderRoutes = require('../routes/riders');
+const resultsRoutes = require('../routes/results');
+const venuesRoutes = require('../routes/venues');
 const adminRoutes = require('../routes/admin');
 
 function createServer(){
@@ -29,10 +29,12 @@ function createServer(){
   // The app.use() function is used to mount the specified middleware function(s) at the
   // path which is being specified.
   // https://www.geeksforgeeks.org/express-js-app-use-function/
-  app.use(routes);
   app.use('/events',eventRoutes)
   app.use('/users',userRoutes)
   app.use('/admin',adminRoutes)
+  app.use('/riders',riderRoutes)
+  app.use('/results',resultsRoutes)
+  app.use('/venues',venuesRoutes)
   app.use('/',adminRoutes)
 
   // A template engine enables you to use static template files in your application.

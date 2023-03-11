@@ -3,17 +3,14 @@ const { exit } = require('process');
 
 const Router = express.Router();
 
-
-
 // *** EVENT HANDLER FUNCIONS **
-
-const getEventsIndexHandler = async (req, res) => {
+Router.get('/', async (req, res) => {
   const { getAllEvents } = require('../utils/databaseFunctions');
   const events = await getAllEvents();
   res.render('events/index', { events });
-};
+});;
 
-const createEventFormHandler = async (req, res) => {
+Router.get('/new', async (req, res) => {
   const {
     getVenueDDList,
     getSoilDDList,
@@ -25,9 +22,9 @@ const createEventFormHandler = async (req, res) => {
   } catch (err) {
     console.log(err);
   }
-};
+});
 
-const addNewEventHandler = async (req, res) => {
+Router.post('/', async (req, res) => {
   const { addEvent } = require('../utils/databaseFunctions');
   try {
     await addEvent(req);
@@ -35,9 +32,9 @@ const addNewEventHandler = async (req, res) => {
   } catch (err) {
     console.log(err);
   }
-};
+});
 
-const getEventByIdHandler = async (req, res) => {
+Router.get('/:id', async (req, res) => {
   const {
     getEventByID,
     getResultsById,
@@ -54,9 +51,9 @@ const getEventByIdHandler = async (req, res) => {
   } catch (err) {
     console.log(err);
   }
-};
+});
 
-const editEventFormHandler = async (req, res) => {
+Router.get('/:id/edit', async (req, res) => {
   const {
     getEventByID,
     etVenueDDList,
@@ -73,9 +70,9 @@ const editEventFormHandler = async (req, res) => {
 
   // Render the edit page, with data for event, venues, and soil passed in:
   res.render('events/edit', { event, venues, soils });
-};
+});
 
-const updateEventHandler = async (req, res) => {
+Router.put('/:id', async (req, res) => {
   const { updateEvent } = require('../utils/databaseFunctions');
 
   try {
@@ -84,14 +81,6 @@ const updateEventHandler = async (req, res) => {
   } catch (err) {
     throw err;
   }
-};
+});
 
-// *** EVENT ROUTES ***
-Router.get('/', getEventsIndexHandler);
-Router.get('/new', createEventFormHandler);
-Router.post('/', addNewEventHandler);
-Router.get('/:id', getEventByIdHandler);
-Router.get('/:id/edit', editEventFormHandler);
-Router.put('/:id', updateEventHandler);
-
-module.exports = Router, getEventsIndexHandler;
+module.exports = Router

@@ -1,19 +1,20 @@
 
 class UserSelections{
-  constructor(user_id, rider_list, round_list, location_list, venue_type_list, venue_open_air, soil_type_list, whoop_section_list, session_type_list, result_type){
-    this.user_id = user_id;
-    this.riders = rider_list,
-    this.sessions = session_type_list;
-    this.outputType = result_type;
+  constructor({user = user_id, riders = rider_list, rounds = round_list, locations = location_list, venue_types = venue_type_list, open_air = venue_open_air, soil = soil_type_list, whoops =  whoop_section_list, sand = sand_section_list, sessions = session_type_list, result_types = result_type}){
+    this.user_id = user;
+    this.riders = riders,
+    this.sessions = sessions;
+    this.outputType = result_types;
     this.attributes= [];    
     
     // Set Category, Attribute, and Value for selections that the user chose:
-    this.setDataAttributes('Series','Round',round_list);
-    this.setDataAttributes('Venue','Location',location_list);
-    this.setDataAttributes('Venue','Venue_Types',venue_type_list);
-    this.setDataAttributes('Venue','Open_Air',venue_open_air);
-    this.setDataAttributes('Track','Soil_Type',soil_type_list);
-    this.setDataAttributes('Track','Whoops',whoop_section_list);
+    this.setDataAttributes('Series','Round',rounds);
+    this.setDataAttributes('Venue','Location',locations);
+    this.setDataAttributes('Venue','Venue_Types',venue_types);
+    this.setDataAttributes('Venue','Open_Air', open_air);
+    this.setDataAttributes('Track','Soil_Type',soil);
+    this.setDataAttributes('Track','Whoops',whoops);
+    this.setDataAttributes('Track','Sand',sand);
   }
   
   // Constructor function to create an object for each data attribute the user selected:
@@ -41,7 +42,6 @@ class UserSelections{
 
     console.table(output);
     return output;
-    // await printUserSelectionsQueryOutput(this);
   }
   
 };
